@@ -1,0 +1,61 @@
+site_name: go-pdfkit docs
+site_description: "A pure-Go, zero-C PDF 1.7 writer with a Go-idiomatic API: vector graphics, subsetted font embedding via go-opentype, and JPEG/PNG image placement."
+site_url: https://go-pdfkit.github.io/docs/
+repo_url: https://github.com/go-pdfkit
+repo_name: go-pdfkit
+edit_uri: ""
+
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - content.code.copy
+    - search.suggest
+  palette:
+    # System default (follows the OS preference), then explicit light and dark.
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: red
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: red
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+extra:
+  version:
+    provider: mike
+    default: latest
+
+nav:
+  - Overview: index.md
+  - Getting started: getting-started.md
+  - Graphics: graphics.md
+  - Text & fonts: text-and-fonts.md
+  - Images: images.md
+  - API reference: api.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
