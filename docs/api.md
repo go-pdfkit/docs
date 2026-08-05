@@ -127,6 +127,30 @@ func (p *Page) DrawPNG(data []byte, r Rect) error
 func (p *Page) DrawJPEG(data []byte, r Rect) error
 ```
 
+## Widget bridge
+
+```go
+const DefaultWidgetScale = 2.0
+
+type WidgetOptions struct {
+    Theme *toolkit.Theme // nil = toolkit.DefaultLight()
+    Scale float64        // layout pixels per PDF point; <= 0 = DefaultWidgetScale
+    Font  *Font          // required by AddWidgetVector; ignored by AddWidget
+}
+
+func (p *Page) AddWidget(root toolkit.Widget, rect Rect, opts *WidgetOptions) error
+func (p *Page) AddWidgetVector(root toolkit.Widget, rect Rect, opts *WidgetOptions) error
+```
+
+`AddWidget` lays a [go-widgets/toolkit](https://github.com/go-widgets/toolkit)
+widget tree out to fill `rect` (in points) and rasterises it as an image
+XObject — pixel-identical to the screen, but not selectable. `AddWidgetVector`
+lays the same tree out and instead emits PDF vector operators, so fills and
+strokes stay crisp and text (including a TrueType-font widget label's own
+embedded face) becomes real, selectable PDF text; it requires
+`WidgetOptions.Font` and returns an error without one. See
+[Widgets](widgets.md) for a full walkthrough.
+
 ## Example
 
 From the package's own `example_test.go`:
