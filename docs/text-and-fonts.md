@@ -81,12 +81,16 @@ Every font a page uses is written as a **Type0 composite font** with
 The outline format depends on the source font:
 
 - **TrueType (`glyf`)** outlines embed as a **subsetted `FontFile2` /
-  `CIDFontType2`**. `pdfkit` walks the `glyf`/`loca` tables, follows
-  composite-glyph components so a subset never drops a referenced
-  sub-glyph, and reassembles a minimal `sfnt` container (`subset.go`).
-- **CFF/OpenType** outlines embed as `FontFile3` / `CIDFontType0`, currently
-  with the **whole `CFF ` table** — charstring subsetting is not yet
-  implemented (see [Scope and limitations](#scope-and-limitations)).
+  `CIDFontType2`** with a `/CIDToGIDMap` stream, via `Font.SubsetTrueType`
+  (composite-glyph components are followed so a subset never drops a
+  referenced sub-glyph; the subset renumbers glyphs, and the map sends each
+  CID — the original glyph id — to its subset id).
+- **CFF/OpenType** outlines embed as a **charstring-subsetted `FontFile3` /
+  `CIDFontType0`**, via `Font.SubsetCFF`, whose glyph numbering is preserved
+  (so an Identity `/CIDToGIDMap` suffices) — except a CID-keyed CFF or a CFF2
+  (variable) font, which `SubsetCFF` cannot charstring-subset and which
+  gracefully falls back to embedding the whole `CFF`/`CFF2` table (see
+  [Scope and limitations](#scope-and-limitations)).
 
 ## Shaped text for complex scripts
 
@@ -107,21 +111,26 @@ mapping with no shaping — reach for `TextShaped` whenever script correctness
 matters, and keep `Text` for simple Latin runs where the extra shaping pass
 isn't needed.
 
-## Missing upstream primitives
+## Font embedding architecture
 
-go-opentype/opentype decodes a font fully but does not expose the raw table
-bytes, the units-per-em, the glyf/loca arrays, or a subsetting export that a
-PDF embedder needs. `pdfkit` therefore **reparses the sfnt container it is
-handed** (`sfnt.go`) and **implements TrueType `glyf` subsetting itself**
-(`subset.go`), independently of go-opentype's own decoded model.
+[go-opentype/opentype](https://github.com/go-opentype/opentype) supplies
+every primitive PDF embedding needs: the descriptor scalars (units-per-em,
+bounding box, ascent/descent, cap height, italic angle, flags, StemV), the
+by-glyph advances for the `/W` array, and the glyph subsetters
+(`Font.SubsetTrueType`, `Font.SubsetCFF`) themselves. `pdfkit` keeps no
+private sfnt re-parse or subsetter of its own — it calls straight into
+go-opentype for parsing, metrics and subsetting alike.
 
 ## Scope and limitations
 
-- CFF/OpenType fonts embed their **whole `CFF ` table**; charstring
-  subsetting is not yet implemented. TrueType fonts **are** fully
-  glyph-subsetted.
-- Encryption, tagged PDF / PDF-A, interactive forms and annotations are out
-  of scope for v0.1.
+- Both outline flavours are **subsetted**: TrueType `glyf` fonts via
+  `go-opentype`'s `SubsetTrueType` and CFF/OpenType fonts via `SubsetCFF`
+  (charstring subsetting, glyph numbering preserved). A CID-keyed CFF or a
+  CFF2 (variable) font cannot be charstring-subsetted by the
+  preserve-numbering path, so it falls back to embedding the whole
+  `CFF`/`CFF2` table.
+- Encryption, tagged PDF / PDF-A, interactive forms and annotations are not
+  yet implemented.
 
 Next: [Images](images.md) for placing JPEG/PNG artwork, or the
 [API reference](api.md) for the complete signature list.

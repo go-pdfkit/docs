@@ -1,5 +1,5 @@
 site_name: go-pdfkit docs
-site_description: "A pure-Go, zero-C PDF 1.7 writer with a Go-idiomatic API: vector graphics, subsetted font embedding via go-opentype, and JPEG/PNG image placement."
+site_description: "A pure-Go, zero-C PDF 1.7 writer with a Go-idiomatic API: vector graphics, subsetted font embedding via go-opentype, JPEG/PNG image placement, and a go-widgets/toolkit widget bridge."
 site_url: https://go-pdfkit.github.io/docs/
 repo_url: https://github.com/go-pdfkit
 repo_name: go-pdfkit
@@ -45,6 +45,7 @@ nav:
   - Graphics: graphics.md
   - Text & fonts: text-and-fonts.md
   - Images: images.md
+  - Widgets: widgets.md
   - API reference: api.md
 
 markdown_extensions:
