@@ -1,11 +1,24 @@
 # go-pdfkit documentation
 
-**A pure-Go, `CGO_ENABLED=0` PDF 1.7 writer** with a Go-idiomatic API. It
-builds documents from pages, draws vector graphics and text, embeds TrueType
-and OpenType/CFF fonts as subsetted composite (Type0) fonts, and places JPEG
-and raster images. Fonts are parsed and shaped with
-[go-opentype](https://github.com/go-opentype/opentype); nothing outside the
-Go standard library and our own pure-Go libraries is required.
+**The whole of PDF in Go, with `CGO_ENABLED=0` and no C anywhere**: read a
+file, write one, rearrange it, draw it, read it back as words and pictures,
+and edit it with other people. Every library here builds for `GOOS=js/wasm`,
+so all of it runs in a browser tab.
+
+Fonts are parsed and shaped with
+[go-opentype](https://github.com/go-opentype/opentype) and pages are
+rasterised by [go-gfx](https://github.com/go-gfx/gfx); nothing outside the Go
+standard library and our own pure-Go libraries is required.
+
+!!! quote "Measured against 118 863 real files"
+    Every claim on this site is measured against a corpus of real PDFs —
+    arXiv's figures, from Matplotlib and Mathematica and pdfTeX and Ghostscript
+    and Adobe — rather than against files written to pass a test. Each wave of
+    work is checked by **hashing the pixels of every page before and after** and
+    putting the biggest changes beside what the operating system's own renderer
+    draws. That is what found a stroke that came out at half its colour, a font
+    that took the dots off every *i*, and a colour transform that turned every
+    plot's paper yellow.
 
 !!! success "Zero C dependencies"
     No cgo, no bundled `libpoppler`/`libharfbuzz`/`libfreetype`. Glyph
@@ -17,17 +30,23 @@ Go standard library and our own pure-Go libraries is required.
 
 ## The family
 
-`pdfkit` is the Go-native counterpart to the Ruby Prawn port
-[go-ruby-prawn](https://github.com/go-ruby-prawn); here the API is
-Go-idiomatic rather than a gem port. Both draw on the same underlying text
-stack:
-
 | Repo | What it is |
 | --- | --- |
-| [`pdfkit`](https://github.com/go-pdfkit/pdfkit) | the writer — `document.go`, `page.go`, `text.go`, `image.go`, `embed.go`, `widget.go`, and the public API |
+| [`reader`](https://github.com/go-pdfkit/reader) | reads and writes the format itself: objects, cross-reference tables and streams, filters, encryption, the page tree, content streams — and a writer that produces the same bytes twice |
+| [`ops`](https://github.com/go-pdfkit/ops) | the verbs, and the `pdfops` command: merge, split, rotate, crop, n-up, watermark, encrypt, and reading a page back |
+| [`render`](https://github.com/go-pdfkit/render) | turns a page into pixels: paths, images, text in every font flavour, functions, shadings and patterns |
+| [`pdffont`](https://github.com/go-pdfkit/pdffont) | what a document says about a font — encodings, widths, and what text a code stands for |
+| [`extract`](https://github.com/go-pdfkit/extract) | reads a page back: the text with where it sits, and the pictures with the box each covers |
+| [`coedit`](https://github.com/go-pdfkit/coedit) | a PDF several people edit at once — the plan is shared, not the file |
+| [`app`](https://github.com/go-pdfkit/app) | a PDF workbench that runs in a browser tab and nowhere else |
+| [`pdfkit`](https://github.com/go-pdfkit/pdfkit) | the document builder: pages, vector graphics, and text in embedded subsetted fonts |
 | [`docs`](https://github.com/go-pdfkit/docs) | this documentation site (MkDocs Material, versioned with mike) |
-| [go-opentype/opentype](https://github.com/go-opentype/opentype) | the sfnt parser and shaper `pdfkit` embeds fonts through |
-| [go-ruby-prawn](https://github.com/go-ruby-prawn) | the Ruby-idiomatic PDF writer built on the same font stack |
+
+Two libraries outside the org do the work under all of it:
+[go-opentype/opentype](https://github.com/go-opentype/opentype), the sfnt,
+CFF and Type 1 parser and shaper, and [go-gfx/gfx](https://github.com/go-gfx/gfx),
+the rasteriser. [go-ruby-prawn](https://github.com/go-ruby-prawn) is the
+Ruby-idiomatic writer built on the same font stack.
 
 ## What it is
 

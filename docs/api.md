@@ -1,8 +1,16 @@
 # API reference
 
-The full public surface of `github.com/go-pdfkit/pdfkit`. See
-[pkg.go.dev](https://pkg.go.dev/github.com/go-pdfkit/pdfkit) for the
-generated reference with source links.
+The full public surface of `github.com/go-pdfkit/pdfkit`, the document
+builder. See [pkg.go.dev](https://pkg.go.dev/github.com/go-pdfkit/pdfkit) for
+the generated reference with source links.
+
+The rest of the family has its reference there too:
+[`reader`](https://pkg.go.dev/github.com/go-pdfkit/reader),
+[`ops`](https://pkg.go.dev/github.com/go-pdfkit/ops),
+[`render`](https://pkg.go.dev/github.com/go-pdfkit/render),
+[`pdffont`](https://pkg.go.dev/github.com/go-pdfkit/pdffont),
+[`extract`](https://pkg.go.dev/github.com/go-pdfkit/extract) and
+[`coedit`](https://pkg.go.dev/github.com/go-pdfkit/coedit).
 
 ## Document
 
