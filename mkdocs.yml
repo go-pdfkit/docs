@@ -1,5 +1,5 @@
 site_name: go-pdfkit docs
-site_description: "A pure-Go, zero-C PDF 1.7 writer with a Go-idiomatic API: vector graphics, subsetted font embedding via go-opentype, JPEG/PNG image placement, and a go-widgets/toolkit widget bridge."
+site_description: "The whole of PDF in pure Go with no C anywhere: read a file, write one, rearrange it, draw it, read it back as words and pictures, and edit it with other people — in a browser tab."
 site_url: https://go-pdfkit.github.io/docs/
 repo_url: https://github.com/go-pdfkit
 repo_name: go-pdfkit
@@ -41,11 +41,19 @@ extra:
 
 nav:
   - Overview: index.md
-  - Getting started: getting-started.md
-  - Graphics: graphics.md
-  - Text & fonts: text-and-fonts.md
-  - Images: images.md
-  - Widgets: widgets.md
+  - Working with a file:
+      - Reading a file: reading.md
+      - Rearranging a file: operations.md
+      - Drawing a page: rendering.md
+      - Reading a page back: extraction.md
+      - Editing together: coediting.md
+      - The browser workbench: workbench.md
+  - Writing a document:
+      - Getting started: getting-started.md
+      - Graphics: graphics.md
+      - Text & fonts: text-and-fonts.md
+      - Images: images.md
+      - Widgets: widgets.md
   - API reference: api.md
 
 markdown_extensions:
