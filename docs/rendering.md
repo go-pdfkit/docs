@@ -38,9 +38,20 @@ Gradients and patterns: axial and radial shadings painted on their own with
 and all four kinds of PDF function, which are also what a Separation or
 DeviceN tint transform is written in.
 
-Mesh shadings and the standard fourteen faces are the waves that follow. The
-corpus holds 371 mesh shadings of the fourth kind and 198 of the seventh,
-against 19 923 axial and 5 589 radial ones.
+And the mesh shadings, all four kinds, which is how a plotting tool writes a
+surface: free-form and lattice-form triangles, each corner its own colour, and
+Coons and tensor patches, whose four sides are cubic curves. A patch is drawn
+by cutting it into a grid of little quadrilaterals — the inside of a Coons
+patch follows from its twelve boundary points, and a tensor patch says four
+more — and each triangle is filled by mixing the colours at its corners across
+it. A patch may carry on from the one before it, sharing an edge and two of
+its colours.
+
+A pattern is placed in the space of the content that names it: the page's own
+space at the top level, and inside a form the form's — its matrix and the
+transform that drew it both count. Nearly every figure a plotting tool writes
+is a form, so a pattern that stayed at the page's origin would miss the shape
+it was asked to fill by the width of a page.
 
 ## How it is checked
 
