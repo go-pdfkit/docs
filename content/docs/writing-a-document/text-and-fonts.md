@@ -1,4 +1,7 @@
-# Text & fonts
+---
+title: "Text & fonts"
+weight: 100
+---
 
 ## Loading a font
 
@@ -132,5 +135,5 @@ go-opentype for parsing, metrics and subsetting alike.
 - Encryption, tagged PDF / PDF-A, interactive forms and annotations are not
   yet implemented.
 
-Next: [Images](images.md) for placing JPEG/PNG artwork, or the
-[API reference](api.md) for the complete signature list.
+Next: [Images](/docs/writing-a-document/images/) for placing JPEG/PNG artwork, or the
+[API reference](/docs/api/) for the complete signature list.

@@ -1,4 +1,7 @@
-# API reference
+---
+title: "API reference"
+weight: 130
+---
 
 The full public surface of `github.com/go-pdfkit/pdfkit`, the document
 builder. See [pkg.go.dev](https://pkg.go.dev/github.com/go-pdfkit/pdfkit) for
@@ -157,7 +160,7 @@ lays the same tree out and instead emits PDF vector operators, so fills and
 strokes stay crisp and text (including a TrueType-font widget label's own
 embedded face) becomes real, selectable PDF text; it requires
 `WidgetOptions.Font` and returns an error without one. See
-[Widgets](widgets.md) for a full walkthrough.
+[Widgets](/docs/writing-a-document/widgets/) for a full walkthrough.
 
 ## Example
 

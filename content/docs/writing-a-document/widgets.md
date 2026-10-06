@@ -1,4 +1,7 @@
-# Widgets
+---
+title: "Widgets"
+weight: 120
+---
 
 `Page.AddWidget` and `Page.AddWidgetVector` "print" a
 [go-widgets/toolkit](https://github.com/go-widgets/toolkit) widget tree onto a
@@ -82,4 +85,4 @@ rect.Y -= pdfkit.Mm(40)
 _ = p.AddWidgetVector(root, rect, &pdfkit.WidgetOptions{Font: font}) // crisp + selectable
 ```
 
-Next: the [API reference](api.md) for the complete signature list.
+Next: the [API reference](/docs/api/) for the complete signature list.

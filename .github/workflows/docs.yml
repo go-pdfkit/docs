@@ -1,93 +1,77 @@
+# Build the documentation, and publish it from main.
+#
+# ⛔ No Python. What this replaced was MkDocs Material plus mike: a
+# requirements.txt, a pip install and a Python setup step, to render a static
+# site for an organisation whose whole argument is that it needs no runtime but
+# Go. Hugo is one binary, and the theme is a Go module.
 name: docs
 
 on:
   push:
     branches: [main]
+  # On a pull request too, so a change that breaks the build is caught before
+  # it lands rather than by the published site going stale.
   pull_request:
   workflow_dispatch:
 
-# The build needs nothing beyond the source. Write access to the repository
-# is granted to the deploy job alone, below, so a pull request build cannot
-# push to gh-pages.
 permissions:
   contents: read
+  pages: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # Build on every pull request as well as on main, so a change to the docs or to
-  # the toolchain in requirements.txt has to prove it still builds before it
-  # lands. Without this the workflow ran only on main, which meant a dependency
-  # bump had no signal at all and nothing could say whether it was safe to merge.
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Set up Python
-        uses: actions/setup-python@v7
+      - uses: actions/checkout@v7
         with:
-          python-version: "3.14"
-          cache: pip
-          cache-dependency-path: requirements.txt
-
-      - name: Install MkDocs Material + mike
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      # --strict turns a broken link or an unknown config key into a failure
-      # rather than a warning nobody reads.
-      - name: Build the site (strict)
-        run: mkdocs build --strict
-
-  deploy:
-    # Only main publishes. A pull request stops after build above: it has no
-    # business pushing to gh-pages, and `permissions: contents: write` is not
-    # granted to a fork's PR anyway.
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    needs: build
-    # Two deploys must never run at once: `mike deploy --push` pushes gh-pages,
-    # and a second job doing the same is rejected outright --
-    #
-    #   ! [rejected]  gh-pages -> gh-pages (fetch first)
-    #
-    # cancel-in-progress stays FALSE deliberately: killing a publish half way
-    # through is worse than making it wait, and the queued run then fetches the
-    # gh-pages the previous one just wrote.
-    concurrency:
-      group: gh-pages-deploy
-      cancel-in-progress: false
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
+          # The theme reads the last-modified date of each page from git, so a
+          # shallow clone would date every page to the checkout.
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v7
+      - uses: actions/setup-go@v7
         with:
-          python-version: "3.14"
+          # Pinned: Hugo modules are Go modules, and the resolver is the one in
+          # this toolchain.
+          go-version: '1.27.1'
 
-      - name: Install MkDocs Material + mike
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.167.0'
+          extended: true
 
-      - name: Configure git for mike
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - uses: actions/configure-pages@v6
+        id: pages
 
-      # mike publishes versioned docs to the gh-pages branch; GitHub Pages serves
-      # that branch at https://go-pdfkit.github.io/docs/. The version label
-      # tracks main as pdfkit's current minor release ("0.4", matching tag
-      # v0.4.0) aliased "latest"; bump the label here on every minor release.
-      # /docs/ redirects to the default ("latest").
-      - name: Deploy versioned docs
-        run: |
-          git fetch origin gh-pages --depth=1 || true
-          mike deploy --push --update-aliases 0.4 latest
-          mike set-default --push latest
+      - name: Build
+        # --minify and the base URL Pages computes, the same way the landing
+        # repository does it.
+        run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+
+      - name: Say which theme built it
+        # The theme is a FORK reached through a replace directive. Printing the
+        # resolved module means a build that silently fell back to upstream is
+        # visible in the log rather than in the rendering.
+        run: hugo mod graph | head -5
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

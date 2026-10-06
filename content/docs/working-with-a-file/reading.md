@@ -1,4 +1,7 @@
-# Reading a file
+---
+title: "Reading a file"
+weight: 20
+---
 
 [`reader`](https://github.com/go-pdfkit/reader) is the parsing and writing
 half: everything about the format itself, and nothing about what a page

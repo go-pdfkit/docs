@@ -1,4 +1,7 @@
-# Getting started
+---
+title: "Getting started"
+weight: 80
+---
 
 ## Install
 
@@ -92,5 +95,5 @@ snapshot testing. Set `Options.Now` to a `func() time.Time` to stamp
 `/CreationDate` and `/ModDate`; leave it `nil` to keep output reproducible.
 `Options.ID` can also supply an explicit trailer `/ID` pair.
 
-Next: [Graphics](graphics.md) for paths and colour, or
-[Text & fonts](text-and-fonts.md) for embedding and shaping.
+Next: [Graphics](/docs/writing-a-document/graphics/) for paths and colour, or
+[Text & fonts](/docs/writing-a-document/text-and-fonts/) for embedding and shaping.

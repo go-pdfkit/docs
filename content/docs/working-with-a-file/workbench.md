@@ -1,4 +1,7 @@
-# The browser workbench
+---
+title: "The browser workbench"
+weight: 70
+---
 
 [`app`](https://github.com/go-pdfkit/app) is a PDF workbench that runs in a
 browser tab and nowhere else.

@@ -1,4 +1,7 @@
-# Rearranging a file
+---
+title: "Rearranging a file"
+weight: 30
+---
 
 [`ops`](https://github.com/go-pdfkit/ops) is the verb layer: what people
 actually do to a PDF they already have. A document here is an ordered list of

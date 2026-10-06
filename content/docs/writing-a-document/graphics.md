@@ -1,4 +1,7 @@
-# Graphics
+---
+title: "Graphics"
+weight: 90
+---
 
 `Page`'s drawing methods mirror PDF's own imaging-model operators closely —
 each method name maps to one or two content-stream operators, listed in
@@ -102,5 +105,5 @@ p.Fill()
 p.Restore()
 ```
 
-Next: [Text & fonts](text-and-fonts.md) for embedding and drawing text, or
-[Images](images.md) for placing JPEG/PNG artwork.
+Next: [Text & fonts](/docs/writing-a-document/text-and-fonts/) for embedding and drawing text, or
+[Images](/docs/writing-a-document/images/) for placing JPEG/PNG artwork.
