@@ -49,7 +49,7 @@ re-parse or subsetter of its own. See
 | [`coedit`](https://github.com/go-pdfkit/coedit) | a PDF several people edit at once — the plan is shared, not the file |
 | [`app`](https://github.com/go-pdfkit/app) | a PDF workbench that runs in a browser tab and nowhere else |
 | [`pdfkit`](https://github.com/go-pdfkit/pdfkit) | the document builder: pages, vector graphics, and text in embedded subsetted fonts |
-| [`docs`](https://github.com/go-pdfkit/docs) | this documentation site (MkDocs Material, versioned with mike) |
+| [`docs`](https://github.com/go-pdfkit/docs) | this documentation site (Hugo, with our fork of the Hextra theme) |
 
 Two libraries outside the org do the work under all of it:
 [go-opentype/opentype](https://github.com/go-opentype/opentype), the sfnt,
