@@ -11,6 +11,19 @@ languageCode = "en"
 
 enableGitInfo = true
 
+# ⛔ The content is NOT under content/docs. This site is served AT /docs/, so a
+# `docs` section would make every page /docs/docs/… -- which it did, and which
+# broke all nineteen internal links at once, because they are written /docs/…
+# and that is the site root here.
+#
+# Hextra picks its documentation layout from the section being called `docs`,
+# so with the content at the root the type is cascaded instead.
+[[cascade]]
+  [cascade.params]
+    type = "docs"
+  [cascade._target]
+    path = "/**"
+
 [markup.highlight]
   noClasses = false
 
@@ -36,11 +49,6 @@ enableGitInfo = true
   [params.editURL]
     enable = true
     base = "https://github.com/go-pdfkit/docs/edit/main/content"
-
-[[menu.main]]
-  name = "Documentation"
-  pageRef = "/docs"
-  weight = 1
 
 [[menu.main]]
   name = "Workbench"
