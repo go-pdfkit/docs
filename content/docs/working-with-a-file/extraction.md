@@ -1,4 +1,7 @@
-# Reading a page back
+---
+title: "Reading a page back"
+weight: 50
+---
 
 [`extract`](https://github.com/go-pdfkit/extract) reads a page as words and
 pictures.

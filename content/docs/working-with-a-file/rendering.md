@@ -1,4 +1,7 @@
-# Drawing a page
+---
+title: "Drawing a page"
+weight: 40
+---
 
 [`render`](https://github.com/go-pdfkit/render) turns a page into pixels. It
 reads with `reader`, rasterises with [go-gfx](https://github.com/go-gfx/gfx),

@@ -1,4 +1,7 @@
-# Editing together
+---
+title: "Editing together"
+weight: 60
+---
 
 [`coedit`](https://github.com/go-pdfkit/coedit) is a PDF several people are
 editing at once.

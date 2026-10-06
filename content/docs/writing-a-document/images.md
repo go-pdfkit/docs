@@ -1,4 +1,7 @@
-# Images
+---
+title: "Images"
+weight: 110
+---
 
 Three methods place raster artwork into a `Rect` given in points (the
 rectangle's `X`/`Y` is its lower-left corner, matching PDF's coordinate
@@ -70,5 +73,5 @@ All three methods place the image with the same graphics-state sequence:
 of its native pixel dimensions. Each distinct image is registered once per
 document as an `/Im<n>` XObject resource, even if drawn on multiple pages.
 
-Next: the [API reference](api.md) for the complete signature list, or back to
-[Text & fonts](text-and-fonts.md).
+Next: the [API reference](/docs/api/) for the complete signature list, or back to
+[Text & fonts](/docs/writing-a-document/text-and-fonts/).

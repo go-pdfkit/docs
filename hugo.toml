@@ -1,0 +1,65 @@
+baseURL = "https://go-pdfkit.github.io/docs/"
+title = "go-pdfkit"
+languageCode = "en"
+
+# ⛔ Hugo + Hextra, and no Python. What this replaced was MkDocs Material plus
+# mike, which needed a Python toolchain, a requirements.txt and a pip install
+# in CI to render a static site for a pure-Go organisation.
+[module]
+  [[module.imports]]
+    path = "github.com/imfing/hextra"
+
+enableGitInfo = true
+
+[markup.highlight]
+  noClasses = false
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[params]
+  description = "The whole of PDF in pure Go with no C anywhere: read a file, write one, rearrange it, draw it, read it back as words and pictures, and edit it with other people — in a browser tab."
+
+  [params.navbar]
+    displayTitle = true
+    displayLogo = true
+    [params.navbar.logo]
+      path = "images/logo.svg"
+      width = 24
+      height = 24
+
+  [params.footer]
+    enable = true
+    displayCopyright = true
+    displayPoweredBy = false
+
+  [params.editURL]
+    enable = true
+    base = "https://github.com/go-pdfkit/docs/edit/main/content"
+
+[[menu.main]]
+  name = "Documentation"
+  pageRef = "/docs"
+  weight = 1
+
+[[menu.main]]
+  name = "Workbench"
+  url = "https://go-pdfkit.github.io/app/"
+  weight = 2
+
+[[menu.main]]
+  name = "Organisation"
+  url = "https://github.com/go-pdfkit"
+  weight = 3
+
+[[menu.main]]
+  name = "Search"
+  weight = 4
+  [menu.main.params]
+    type = "search"
+
+[[menu.main]]
+  weight = 5
+  url = "https://github.com/go-pdfkit"
+  [menu.main.params]
+    icon = "github"

@@ -1,3 +1,8 @@
+---
+title: "Overview"
+weight: 10
+---
+
 # go-pdfkit documentation
 
 **The whole of PDF in Go, with `CGO_ENABLED=0` and no C anywhere**: read a
@@ -10,24 +15,28 @@ Fonts are parsed and shaped with
 rasterised by [go-gfx](https://github.com/go-gfx/gfx); nothing outside the Go
 standard library and our own pure-Go libraries is required.
 
-!!! quote "Measured against 118 863 real files"
-    Every claim on this site is measured against a corpus of real PDFs —
-    arXiv's figures, from Matplotlib and Mathematica and pdfTeX and Ghostscript
-    and Adobe — rather than against files written to pass a test. Each wave of
-    work is checked by **hashing the pixels of every page before and after** and
-    putting the biggest changes beside what the operating system's own renderer
-    draws. That is what found a stroke that came out at half its colour, a font
-    that took the dots off every *i*, and a colour transform that turned every
-    plot's paper yellow.
+{{< callout type="info" >}}
+**Measured against 118 863 real files**
 
-!!! success "Zero C dependencies"
-    No cgo, no bundled `libpoppler`/`libharfbuzz`/`libfreetype`. Glyph
-    subsetting, font-descriptor metrics and per-glyph advances all come from
-    [go-opentype](https://github.com/go-opentype/opentype)'s
-    `Font.SubsetTrueType` / `Font.SubsetCFF` — `pdfkit` keeps no private sfnt
-    re-parse or subsetter of its own. See
-    [Text & fonts](text-and-fonts.md#font-embedding-architecture).
+Every claim on this site is measured against a corpus of real PDFs —
+arXiv's figures, from Matplotlib and Mathematica and pdfTeX and Ghostscript
+and Adobe — rather than against files written to pass a test. Each wave of
+work is checked by **hashing the pixels of every page before and after** and
+putting the biggest changes beside what the operating system's own renderer
+draws. That is what found a stroke that came out at half its colour, a font
+that took the dots off every *i*, and a colour transform that turned every
+plot's paper yellow.
+{{< /callout >}}
+{{< callout type="info" >}}
+**Zero C dependencies**
 
+No cgo, no bundled `libpoppler`/`libharfbuzz`/`libfreetype`. Glyph
+subsetting, font-descriptor metrics and per-glyph advances all come from
+[go-opentype](https://github.com/go-opentype/opentype)'s
+`Font.SubsetTrueType` / `Font.SubsetCFF` — `pdfkit` keeps no private sfnt
+re-parse or subsetter of its own. See
+[Text & fonts](/docs/writing-a-document/text-and-fonts/#font-embedding-architecture).
+{{< /callout >}}
 ## The family
 
 | Repo | What it is |
@@ -70,7 +79,7 @@ Ruby-idiomatic writer built on the same font stack.
 - **Widget bridge**: `Page.AddWidget` and `Page.AddWidgetVector` "print" a
   [go-widgets/toolkit](https://github.com/go-widgets/toolkit) widget tree onto
   a page — as a rasterised image, or as PDF vector operators with selectable
-  text. See [Widgets](widgets.md).
+  text. See [Widgets](/docs/writing-a-document/widgets/).
 - **Deterministic output**: with the zero `Options`, a document has no
   timestamps and a content-derived `/ID` (a SHA-256 of the body), so
   identical inputs produce byte-identical PDFs.
@@ -84,7 +93,7 @@ Ruby-idiomatic writer built on the same font stack.
 - Encryption, tagged PDF / PDF-A, interactive forms and annotations are not
   yet implemented.
 
-See [Scope and limitations](text-and-fonts.md#scope-and-limitations) for the
+See [Scope and limitations](/docs/writing-a-document/text-and-fonts/#scope-and-limitations) for the
 full picture, and the upstream
 [README](https://github.com/go-pdfkit/pdfkit#scope-and-limitations) for the
 canonical statement.
@@ -97,15 +106,15 @@ go get github.com/go-pdfkit/pdfkit
 
 ## Where to go next
 
-- [Getting started](getting-started.md) — the five calls that make a PDF:
+- [Getting started](/docs/writing-a-document/getting-started/) — the five calls that make a PDF:
   `New` → `AddPage` → `SetFont` → `Text` → `Write`.
-- [Graphics](graphics.md) — paths, colour, line state, transforms, clipping
+- [Graphics](/docs/writing-a-document/graphics/) — paths, colour, line state, transforms, clipping
   and transparency.
-- [Text & fonts](text-and-fonts.md) — loading fonts, drawing text, measuring
+- [Text & fonts](/docs/writing-a-document/text-and-fonts/) — loading fonts, drawing text, measuring
   and wrapping, and the shaped-text API for complex scripts.
-- [Images](images.md) — `DrawImage`, `DrawPNG` and `DrawJPEG`.
-- [Widgets](widgets.md) — printing a go-widgets/toolkit widget tree to a page.
-- [API reference](api.md) — the full public surface with Go examples.
+- [Images](/docs/writing-a-document/images/) — `DrawImage`, `DrawPNG` and `DrawJPEG`.
+- [Widgets](/docs/writing-a-document/widgets/) — printing a go-widgets/toolkit widget tree to a page.
+- [API reference](/docs/api/) — the full public surface with Go examples.
 
 Source lives at
 [github.com/go-pdfkit/pdfkit](https://github.com/go-pdfkit/pdfkit).
