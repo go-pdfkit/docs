@@ -12,7 +12,8 @@ The rest of the family has its reference there too:
 [`ops`](https://pkg.go.dev/github.com/go-pdfkit/ops),
 [`render`](https://pkg.go.dev/github.com/go-pdfkit/render),
 [`pdffont`](https://pkg.go.dev/github.com/go-pdfkit/pdffont),
-[`extract`](https://pkg.go.dev/github.com/go-pdfkit/extract) and
+[`extract`](https://pkg.go.dev/github.com/go-pdfkit/extract),
+[`document`](https://pkg.go.dev/github.com/go-pdfkit/document) and
 [`coedit`](https://pkg.go.dev/github.com/go-pdfkit/coedit).
 
 ## Document
