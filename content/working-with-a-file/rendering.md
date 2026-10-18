@@ -27,8 +27,19 @@ XObjects with their own matrix, box and resources.
 
 Images at every bit depth and colour space, with a `/Decode` array, as
 one-bit stencils painted in the colour in force, and with either kind of
-transparency. A JPEG is decoded by the standard library; a format nothing
-here reads is left undrawn rather than drawn wrong.
+transparency. A format nothing here reads is left undrawn rather than drawn
+wrong. Which decoder runs is part of what is drawn, so it is named:
+
+| filter | decoder |
+|---|---|
+| `/DCTDecode` | [`go-images/jpeg`](https://github.com/go-images/jpeg), Go's own `image/jpeg` with one change: a four-component picture's chroma is upsampled the way libjpeg does, not by repeating each sample |
+| `/JPXDecode` | [`go-images/jpeg2000`](https://github.com/go-images/jpeg2000), a fork that reads a CMYK file as ink, and decodes a lossless picture 2.4× faster on amd64 than it did before v0.13.7 |
+| `/JBIG2Decode` | `go-gfx/gfx/codec`, where the fleet keeps its image decoders |
+| `/CCITTFaxDecode`, `/FlateDecode`, `/LZWDecode`, `/RunLengthDecode` | `go-pdfkit/reader`, which runs them to samples |
+
+This page used to say that a JPEG is decoded by the standard library. That
+stopped being true when the `jpeg` fork was taken, and render's README had
+already been corrected.
 
 Text from an embedded **TrueType**, **OpenType**, **bare CFF** or
 **PostScript Type 1** program, from a composite font addressed by character
