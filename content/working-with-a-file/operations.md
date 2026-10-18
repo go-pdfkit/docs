@@ -24,8 +24,13 @@ pages and `1,1` gives two copies.
 
 Merge, select, delete, reverse, move, rotate, crop, resize, split; n-up,
 booklet, overlay and underlay, blank pages; watermarks, page numbers, Bates
-stamps and free stamps; sanitize, flatten, strip; compress, encrypt, decrypt
-and permissions; and reading a page back as text or as pictures.
+stamps and free stamps; placing a picture — a signature, a logo, a seal;
+sanitize, flatten, strip; compress, encrypt, decrypt and permissions; and
+reading a page back as text or as pictures.
+
+`place` is what "sign a PDF" means in every tool that offers it: a picture of
+a signature, put where you say. It is not cryptography and does not claim to
+be — a drawn squiggle proves nothing about who drew it.
 
 Links and bookmarks are **carried over** and pointed at the pages they became,
 so extracting three pages of a book leaves the links between those three
@@ -40,6 +45,7 @@ pdfops merge out.pdf a.pdf b.pdf
 pdfops select -pages 4-6 report.pdf extract.pdf
 pdfops nup -n 4 slides.pdf handout.pdf
 pdfops watermark -text CONFIDENTIAL contract.pdf marked.pdf
+pdfops place -image signature.png -at bottom-right -width 120 contract.pdf signed.pdf
 pdfops encrypt -user letmein -allow print,copy plain.pdf locked.pdf
 pdfops -password letmein permissions locked.pdf
 pdfops text -layout -pages 1 paper.pdf
