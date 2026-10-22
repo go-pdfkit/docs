@@ -1,6 +1,10 @@
 baseURL = "https://go-pdfkit.github.io/docs/"
 title = "go-pdfkit"
-languageCode = "en"
+# ⛔ `locale`, not `languageCode`: deprecated in Hugo 0.158.0. Both this and
+# cascade.target below were found by building with --panicOnWarning, which this
+# site's workflow does not pass — a deprecation that fails no build is one
+# nobody sees until the release that removes it.
+locale = "en"
 
 # ⛔ Hugo + Hextra, and no Python. What this replaced was MkDocs Material plus
 # mike, which needed a Python toolchain, a requirements.txt and a pip install
@@ -21,7 +25,11 @@ enableGitInfo = true
 [[cascade]]
   [cascade.params]
     type = "docs"
-  [cascade._target]
+  # ⛔ `target`, not `_target`: the underscored spelling was deprecated in Hugo
+  # 0.156.0, and a build with --panicOnWarning refuses it outright. It was
+  # silent here because this site's workflow does not pass that flag, so the
+  # deprecation sat in the config waiting for the release that removes it.
+  [cascade.target]
     path = "/**"
 
 [markup.highlight]

@@ -49,7 +49,13 @@ jobs:
       - name: Build
         # --minify and the base URL Pages computes, the same way the landing
         # repository does it.
-        run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+        #
+        # ⛔ --panicOnWarning, because without it a deprecation fails nothing
+        # and so is seen by nobody. This build carried TWO — cascade._target
+        # (Hugo 0.156) and languageCode (0.158) — each of which will stop the
+        # site building outright at the release that removes it, and neither
+        # of which this workflow had any way to report.
+        run: hugo --minify --panicOnWarning --printPathWarnings --baseURL "${{ steps.pages.outputs.base_url }}/"
 
       - name: Say which theme built it
         # The theme is a FORK reached through a replace directive. Printing the
