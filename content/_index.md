@@ -76,10 +76,11 @@ Ruby-idiomatic writer built on the same font stack.
 - **Images**: JPEG embedded directly (`DCTDecode`, no re-encoding); PNG and
   any `image.Image` rasterised as XObjects (`FlateDecode`) with an `/SMask`
   for alpha.
-- **Widget bridge**: `Page.AddWidget` and `Page.AddWidgetVector` "print" a
+- **Widget bridge**: the subpackage `pdfkit/widget` "prints" a
   [go-widgets/toolkit](https://github.com/go-widgets/toolkit) widget tree onto
-  a page — as a rasterised image, or as PDF vector operators with selectable
-  text. See [Widgets](/docs/writing-a-document/widgets/).
+  a page, as a rasterised image (`widget.Add`) or as PDF vector operators with
+  selectable text (`widget.AddVector`). Importing `pdfkit` alone does not link
+  the toolkit. See [Widgets](/docs/writing-a-document/widgets/).
 - **Deterministic output**: with the zero `Options`, a document has no
   timestamps and a content-derived `/ID` (a SHA-256 of the body), so
   identical inputs produce byte-identical PDFs.

@@ -139,29 +139,36 @@ func (p *Page) DrawPNG(data []byte, r Rect) error
 func (p *Page) DrawJPEG(data []byte, r Rect) error
 ```
 
-## Widget bridge
+## Widget bridge: package `pdfkit/widget`
 
 ```go
-const DefaultWidgetScale = 2.0
+import "github.com/go-pdfkit/pdfkit/widget"
 
-type WidgetOptions struct {
+const DefaultScale = 2.0
+
+type Options struct {
     Theme *toolkit.Theme // nil = toolkit.DefaultLight()
-    Scale float64        // layout pixels per PDF point; <= 0 = DefaultWidgetScale
-    Font  *Font          // required by AddWidgetVector; ignored by AddWidget
+    Scale float64        // layout pixels per PDF point; <= 0 = DefaultScale
+    Font  *pdfkit.Font   // required by AddVector; ignored by Add
 }
 
-func (p *Page) AddWidget(root toolkit.Widget, rect Rect, opts *WidgetOptions) error
-func (p *Page) AddWidgetVector(root toolkit.Widget, rect Rect, opts *WidgetOptions) error
+var ErrEmptyRect, ErrNoFont error
+
+func Add(p *pdfkit.Page, root toolkit.Widget, rect pdfkit.Rect, opts *Options) error
+func AddVector(p *pdfkit.Page, root toolkit.Widget, rect pdfkit.Rect, opts *Options) error
 ```
 
-`AddWidget` lays a [go-widgets/toolkit](https://github.com/go-widgets/toolkit)
+`Add` lays a [go-widgets/toolkit](https://github.com/go-widgets/toolkit)
 widget tree out to fill `rect` (in points) and rasterises it as an image
-XObject — pixel-identical to the screen, but not selectable. `AddWidgetVector`
-lays the same tree out and instead emits PDF vector operators, so fills and
-strokes stay crisp and text (including a TrueType-font widget label's own
-embedded face) becomes real, selectable PDF text; it requires
-`WidgetOptions.Font` and returns an error without one. See
-[Widgets](/docs/writing-a-document/widgets/) for a full walkthrough.
+XObject — pixel-identical to the screen, but not selectable. `AddVector` lays
+the same tree out and emits PDF vector operators instead, so fills and strokes
+stay crisp. Its text becomes real, selectable PDF text, a TrueType-font widget
+label's own embedded face included. It requires `Options.Font`.
+
+The bridge is a separate package so that importing `pdfkit` does not link the
+toolkit. Until v0.19 it was `Page.AddWidget` and `Page.AddWidgetVector`. See
+[Widgets](/docs/writing-a-document/widgets/) for the walkthrough and the
+upgrade table.
 
 ## Example
 
