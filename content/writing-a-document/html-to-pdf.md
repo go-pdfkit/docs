@@ -3,7 +3,7 @@ title: "HTML to PDF"
 weight: 130
 ---
 
-[`go-pdfkit/html2pdf`](https://github.com/go-pdfkit/html2pdf) (v0.1.0) turns
+[`go-pdfkit/html2pdf`](https://github.com/go-pdfkit/html2pdf) (v0.2.0) turns
 static HTML into a **vector** PDF: go-webengine lays the page out and the
 result is written through pdfkit's text, rect and stroke calls, so the text in
 the PDF is real text. No headless browser is involved.
@@ -28,11 +28,38 @@ doc.Write(f)
 information dictionary; an empty `Title` is taken from the document's
 `<title>`.
 
+## Page numbers and a table of contents
+
+Since v0.2.0 the page's CSS can print on every page and can refer to pages.
+`@page` margin boxes ([CSS Paged Media 3, section
+5](https://www.w3.org/TR/css-page-3/#margin-boxes)) — `@top-left`,
+`@top-center`, `@top-right`, `@bottom-left`, `@bottom-center`,
+`@bottom-right` — take a `content` of strings, `counter(page)` and
+`counter(pages)`, and `font-size`, `font-family`, `font-weight`,
+`font-style`, `color` and `text-align`:
+
+```css
+@page { size: A4; margin: 20mm;
+  @bottom-center { content: counter(page) " / " counter(pages); font-size: 9pt } }
+```
+
+`target-counter(attr(href url), page)` ([CSS Content 3, section
+2.6.1](https://www.w3.org/TR/css-content-3/#target-counter)) prints the page
+that an `href="#id"` points to, which is what a table of contents needs:
+
+```css
+.toc a::after { content: target-counter(attr(href url), page) }
+```
+
+The layout is run again until the numbers are stable (at most four passes).
+`leader()` is accepted and draws nothing. The corner and side margin boxes,
+`target-counters()` and `target-text()` are not supported.
+
 ## From the shell
 
 ```sh
-go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.1.0 --in report.html --out report.pdf
-go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.1.0 --url https://example.org/report --out report.pdf
+go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.2.0 --in report.html --out report.pdf
+go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.2.0 --url https://example.org/report --out report.pdf
 ```
 
 The command is built on cobra with POSIX flags: `--in/-i`, `--url/-u`,
