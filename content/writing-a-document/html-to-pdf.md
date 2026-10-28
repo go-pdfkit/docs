@@ -3,7 +3,7 @@ title: "HTML to PDF"
 weight: 130
 ---
 
-[`go-pdfkit/html2pdf`](https://github.com/go-pdfkit/html2pdf) (v0.2.0) turns
+[`go-pdfkit/html2pdf`](https://github.com/go-pdfkit/html2pdf) (v0.3.0) turns
 static HTML into a **vector** PDF: go-webengine lays the page out and the
 result is written through pdfkit's text, rect and stroke calls, so the text in
 the PDF is real text. No headless browser is involved.
@@ -27,6 +27,15 @@ doc.Write(f)
 `Options.Title`, `Author`, `Subject` and `Keywords` fill the PDF's
 information dictionary; an empty `Title` is taken from the document's
 `<title>`.
+
+## Lists
+
+Since v0.3.0 (go-webengine v0.18.0) list markers are painted: `::marker`,
+every `list-style-type` (disc, circle, square, decimal, the alphabetic and
+roman ones, `none`), and the `start`, `reversed` and `value` attributes of
+`<ol>` / `<li>`. CSS escapes in `content` strings are decoded as CSS Syntax 3
+says, and CSS counters are supported. HTML that wrote its own bullets as text
+to work around this should drop them: they would print twice.
 
 ## Page numbers and a table of contents
 
@@ -58,8 +67,8 @@ The layout is run again until the numbers are stable (at most four passes).
 ## From the shell
 
 ```sh
-go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.2.0 --in report.html --out report.pdf
-go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.2.0 --url https://example.org/report --out report.pdf
+go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.3.0 --in report.html --out report.pdf
+go run github.com/go-pdfkit/html2pdf/cmd/html2pdf@v0.3.0 --url https://example.org/report --out report.pdf
 ```
 
 The command is built on cobra with POSIX flags: `--in/-i`, `--url/-u`,
