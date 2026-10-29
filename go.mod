@@ -8,4 +8,4 @@ go 1.27.1
 //
 // go-pdfkit/docs is the FIRST repository in the fleet to consume it, so this
 // is the pattern the others will copy.
-replace github.com/imfing/hextra => github.com/tannevaled/hextra v0.19.0
+replace github.com/imfing/hextra => github.com/tannevaled/hextra v0.24.0
