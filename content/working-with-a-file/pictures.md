@@ -45,6 +45,36 @@ the file reads perfectly well, and writing a layered document is a different
 job. "I do not know that format" would be a lie, and writing a PNG under a
 `.psd` name would be worse than either.
 
+## An SVG stays vector
+
+An SVG is not in the table above, because it is not a picture: it is a drawing,
+and a PDF can hold the drawing itself. `convert.SVGToPDF` turns its outlines
+into PDF path operators, so the page scales without pixels and a figure that
+would be tens of kilobytes of raster is about a kilobyte of geometry.
+
+⛔ **What makes that safe is the refusal, not the translation.** Two vector
+languages look alike until you meet the parts that do not correspond —
+gradients in two unit systems, clip paths, embedded rasters — and a converter
+that silently drops those produces a file that opens and is quietly wrong,
+which is worse than a picture. go-gfx's `svg.Walk` **reports** what it could
+not hand over, so a document using one of them is **drawn whole** instead.
+There is no third outcome where some of it survived.
+
+`convert.SVGToPDFVector` is the same translation without the fallback, for a
+caller who would rather be told no than be given a picture.
+
+Measured: the page rendered from the vector PDF against go-gfx's own drawing of
+the same SVG differs by a mean of **0.03 of 255** per channel, with a blank
+page of the same size scoring 38.19 as the control — the measure can tell
+drawing from nothing. `qpdf --check`, `mutool info` and ghostscript all accept
+the output.
+
+{{< callout type="info" >}}
+`DPI` is consulted only when the document is drawn. On the vector path it has
+nothing to say, because the output has no resolution — the same document at 72
+and at 144 is byte for byte the same file.
+{{< /callout >}}
+
 ## WebP writes in both of its codecs
 
 ⛔ **Quality 100 means the lossless codec**, not the finest lossy one. They are
