@@ -25,12 +25,51 @@ pages and `1,1` gives two copies.
 Merge, select, delete, reverse, move, rotate, crop, resize, split; n-up,
 booklet, overlay and underlay, blank pages; watermarks, page numbers, Bates
 stamps and free stamps; placing a picture — a signature, a logo, a seal;
-sanitize, flatten, strip; compress, encrypt, decrypt and permissions; and
-reading a page back as text or as pictures.
+sanitize, flatten, strip; compress, encrypt, decrypt and permissions;
+straightening a scan; and reading a page back as text or as pictures.
 
 `place` is what "sign a PDF" means in every tool that offers it: a picture of
 a signature, put where you say. It is not cryptography and does not claim to
 be — a drawn squiggle proves nothing about who drew it.
+
+## Straightening a scan
+
+`deskew` measures how far each page is tilted and turns the crooked ones back.
+It **draws** each page to measure it, and reports every page's angle and
+whether it was corrected.
+
+```sh
+pdfops deskew -list scan.pdf              # just the angles, write nothing
+pdfops deskew scan.pdf straight.pdf
+pdfops deskew -threshold 0.1 -dpi 300 scan.pdf straight.pdf
+```
+
+The angle comes from **Baird's projection profile** (*The skew angle of printed
+documents*, Proc. SPSE 1987): the page is sheared rather than rotated — which
+keeps the scan-line counts exact, where resampling would blur the very line
+structure being measured — and the angle taken is the one that maximises the
+variance of the marked-pixel count per scan line.
+
+**The correction is not a rasterisation.** The angle is measured on a render,
+but it is applied as a transformation of the page's own content, so text stays
+text and a vector drawing stays vector. A deskew that flattened the page would
+quietly undo the thing a scan is usually deskewed *for*, which is OCR.
+
+Judged by tesseract, which knows nothing of this code: a rendered page it reads
+at 0.968 similarity straight, and at 0.895 tilted by 7°, it reads back at
+**0.968** once deskewed — the straight page's own figure.
+
+A page under `-threshold` (half a degree by default) is reported and left
+alone, byte for byte. A page with nothing on it has no skew and is reported as
+such rather than counted as level: one blank separator sheet does not stop the
+rest of a stack being straightened, though a document where *no* page can be
+measured is an error rather than a silent success.
+
+`-dpi` is a measurement setting only, since nothing of the render reaches the
+output: a higher value buys accuracy and costs time, never quality. Too *low* a
+value does silent damage — the projection has to resolve the text lines, and
+below about two samples per line pitch it returns an angle that is simply
+wrong.
 
 ## Forms
 
@@ -99,6 +138,7 @@ pdfops encrypt -user letmein -allow print,copy plain.pdf locked.pdf
 pdfops -password letmein permissions locked.pdf
 pdfops text -layout -pages 1 paper.pdf
 pdfops images paper.pdf pictures/
+pdfops deskew scan.pdf straight.pdf
 ```
 
 ## What the corpus says
