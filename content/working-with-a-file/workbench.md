@@ -61,6 +61,22 @@ document that labels its pages something other than their position — `iv`,
 `A-2`, a plate number — says both, because the label is what its own index
 refers to and the position is what every other control counts in.
 
+**Widening the rail redraws the minipages at their new size.** Each tile is a
+page put through the renderer at the rail's width, so they are re-made when you
+let go of the divider rather than on every frame of the drag — dragging a rail
+to a width you have not chosen yet should not render the whole document a dozen
+times on the way there. Until you let go, the tiles are the pictures you had,
+scaled into the new boxes.
+
+For a release they never came back. Dropping the pictures so they could be made
+*again* at the new width was only half the arrangement, and nothing performed
+the other half: you were left with the pictures made for the old width,
+stretched. A second defect sat under it — a repaint arriving in the middle of
+the gesture rebuilt the band, and with it the divider you were holding, so the
+drag stopped after one frame. Both were found by driving a real browser and
+performing a real drag, which is now part of every check: the one thing that
+could not be done from a test was the gesture the feature is made of.
+
 ## Every change is applied, written, and read back
 
 Before it is drawn. So what is on the screen is what would come out of Save,
