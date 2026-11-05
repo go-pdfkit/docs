@@ -53,12 +53,31 @@ one above the other, with a divider of their own:
 - the **minipages**, one numbered tile per page, each the shape of its own
   page, with the one you are reading marked.
 
-A document that carries no outline gets a **list of its pages** in the top
+A document that carries no outline gets **the links it carries** in the top
 pane rather than nothing. Most documents carry no outline, so a contents view
 offered only to the minority is one nobody finds — this one shipped that way
-once and was reported missing by somebody running the build that added it. A
-document that labels its pages something other than their position — `iv`,
-`A-2`, a plate number — says both, because the label is what its own index
+once and was reported missing by somebody running the build that added it.
+
+The fallback was a list of pages first, and that was the wrong thing. A link is
+structure the **author** wrote: *this phrase leads there*. A list of pages is
+arithmetic over the document — the same list for every file of the same length,
+telling a reader nothing they could not get by counting.
+
+Each row says **the words the link sits on**, because that is the only name a
+link has: a PDF link is a rectangle and a destination, and nothing in it is a
+title. A link with no words under it — an image that is a link, a link over a
+blank area of a scan — keeps its row and names where it goes instead.
+
+A link that **leaves** the document is shown and not followed. Pressing it says
+where it would go, at the bottom of the window. Nothing leaves this tab, and
+that includes you.
+
+Past a thousand links the last row says how many were left out, because a list
+that stops without saying so misrepresents the document.
+
+A list of pages is still what a document carrying neither an outline nor a link
+gets. A document that labels its pages something other than their position —
+`iv`, `A-2`, a plate number — says both, because the label is what its own index
 refers to and the position is what every other control counts in.
 
 **Widening the rail redraws the minipages at their new size.** Each tile is a
