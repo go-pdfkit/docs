@@ -42,10 +42,50 @@ so a verb that cannot run greys on every surface showing it: the arrows at the
 ends of a document, Delete on a document of one page, Fill in without a form,
 everything with nothing open.
 
+## Finding your way around
+
+Down the left there is a rail you can widen by dragging its divider. It holds
+two views of the same question — *where am I, and how do I get where I want* —
+one above the other, with a divider of their own:
+
+- the document's own **table of contents**, its `/Outlines` tree, each row
+  indented by its depth and pressable to go to its page;
+- the **minipages**, one numbered tile per page, each the shape of its own
+  page, with the one you are reading marked.
+
+A document that carries no outline gets a **list of its pages** in the top
+pane rather than nothing. Most documents carry no outline, so a contents view
+offered only to the minority is one nobody finds — this one shipped that way
+once and was reported missing by somebody running the build that added it. A
+document that labels its pages something other than their position — `iv`,
+`A-2`, a plate number — says both, because the label is what its own index
+refers to and the position is what every other control counts in.
+
 ## Every change is applied, written, and read back
 
 Before it is drawn. So what is on the screen is what would come out of Save,
 rather than a picture of what was meant to happen.
+
+**A change.** Going to a page is not one: the only difference it makes is
+which number is lit, and it used to pay that whole bill anyway — on a
+forty-page sample, one press on a minipage wrote 8 422 bytes, parsed them back
+and re-rendered twenty pages, both of which grow with the file. A test counts
+the writes a navigation makes and fails on any; its control is a verb, which
+must still make them.
+
+## Which build you are running
+
+The status line names it, bottom right, on the empty workbench as well as an
+open document: `v0.19.0-2-g0aecb79` is the tag it was cut from and how far
+past it the commit is.
+
+That is the one question you cannot answer by looking, because **an old binary
+and a missing feature are the same screen** — and this family has already paid
+for it: a cache-first service worker once kept five releases in a row from
+everybody who had visited before, and it was reported as the layout
+regressing. The deploy passes `git describe` through `-ldflags -X` and then
+greps the built wasm for the string, because a `-X` naming a variable that no
+longer exists is accepted in silence.
 
 ## A canvas has no DOM, so the workbench says where its controls are
 
