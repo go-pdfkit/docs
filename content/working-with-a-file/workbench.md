@@ -144,6 +144,51 @@ are depends on how the file was produced: the page measured here would report
 three for one line of text, and a page drawing that line in one go would report
 one.
 
+## Redacting a passage
+
+**Redact**, on the same tab as the selection, takes the selected words **out of
+the file**. It is the only verb there that destroys anything, and the only one a
+saved document cannot be talked out of.
+
+⛔ **It is not a black rectangle.** A rectangle drawn over a paragraph is the
+standard data leak: the text stays in the page's content stream, so anyone can
+copy it out from under the box, and a command-line reader prints it. So this
+removes the operator that drew the text, and says which it did — *"removed 17
+characters from 1 page — the text is gone from the file, not covered"*.
+
+ISO 32000-1 §12.5.6.23 is explicit about the difference. A conforming reader
+applying a redaction *"shall remove all traces of the specified content"*, and
+*"clipping or image masks shall not be used to hide that data"*.
+
+⛔ **And it refuses, out loud, where it cannot remove the words completely.** The
+refusal names the page and the reason, because that reason is the useful part: a
+reader told *"this line is drawn in one piece, and taking it would take more
+than you asked for"* can select the whole line instead. A workbench that
+swallowed the refusal and drew a box over the words would be the leak.
+
+It refuses a passage that is:
+
+- inside a **form XObject** — those bytes are shared with every page that draws
+  it, so cleaning one page would change the others;
+- across an **image** — the spec requires the pixels themselves to be
+  destroyed, which is not yet done, and a mask over them is exactly what the
+  spec forbids;
+- under an **annotation** — a note, a highlight or a form field holds text of
+  its own, which can be the very words;
+- drawn by **one operator that also draws words outside the selection** —
+  removing it would take text nobody asked about. A redaction betrays its
+  reader in two directions, and removing too much is the quieter one.
+
+The commonest refusal is the one you walk into: **highlight a passage, then
+decide to redact it.** The highlight is an annotation over those words and its
+note can quote them, so it has to go first.
+
+Where the words are is decided **once**, by the same arithmetic the marking
+verbs use. Marking and redacting are opposite acts — one is written over the
+page and comes off again, the other takes the text out — but they are the same
+question about *where*, and a reader who highlights a line and then redacts it
+gets the same words both times.
+
 ## Every change is applied, written, and read back
 
 Before it is drawn. So what is on the screen is what would come out of Save,
