@@ -96,6 +96,54 @@ drag stopped after one frame. Both were found by driving a real browser and
 performing a real drag, which is now part of every check: the one thing that
 could not be done from a test was the gesture the feature is made of.
 
+## Selecting the words on a page, and marking them
+
+Drag across a page to select its text. **Copy the words** on the Read tab puts
+it on the clipboard and Escape lets go; a press anywhere else — the scrollbar,
+the rail, the panel, a form being filled in — keeps the press it always had.
+
+With words selected, the same tab offers **Highlight**, **Underline** and
+**Strike out**. Each says how much it marked — *"highlighted 17 characters on 1
+page"* — and lets the selection go, because a mark lands in the file rather than
+on the screen, and a verb that worked in silence is one you press twice.
+
+A page is a **picture**, so none of this comes for free. The viewer shows
+rasterised pages and nothing in it is text; the glyphs are read separately and
+placed where they are drawn, from the same layout the pages are rendered from,
+so the text cannot drift from the picture it sits on through a scroll, a zoom, a
+page flip or a resize. Rendering the pages as vectors later would not change
+that: a PDF renderer turns every glyph into an outline before it paints, so the
+output holds paths and no text at all.
+
+The selection is grouped **one run per word**. A PDF sets glyphs one at a time —
+a real page measured here has 152 runs for four lines — so a reader who selected
+a line and copied it once got `t h e f i r s t c h a p t e r`. A PDF never draws
+a space either; it moves the pen. Where a word ends is therefore a judgement
+about the gap to the next glyph, and a face that reports an unbelievable width
+for its own space is distrusted.
+
+A mark is an **annotation, not ink**. ISO 32000-1 §12.5.6.10: a text-markup
+annotation carries `QuadPoints`, the corners of the quadrilaterals it covers, in
+the page's own user space. The page's content stream is untouched, so the words
+under a highlight stay selectable, searchable and extractable, and the mark can
+be deleted again by anything that edits annotations. There is one quadrilateral
+per run, so the mark has the same shape as what you saw lit rather than one box
+drawn around it all — and one annotation per page, because no annotation can
+span two of them.
+
+That the mark lands where the highlight was is the one thing worth insisting on.
+The rectangles written into the file are **the rectangles the selection paints**:
+the toolkit returns them and drawing the highlight is a loop over that same
+list. Deriving them twice — once to light the screen, once to write the file —
+would mean two implementations of one rule, and the first time they disagreed
+the saved document would be wrong while the screen looked right.
+
+The count is characters rather than quadrilaterals for the same reason a reader
+can check it. A quadrilateral is not something you can see, and how many there
+are depends on how the file was produced: the page measured here would report
+three for one line of text, and a page drawing that line in one go would report
+one.
+
 ## Every change is applied, written, and read back
 
 Before it is drawn. So what is on the screen is what would come out of Save,
