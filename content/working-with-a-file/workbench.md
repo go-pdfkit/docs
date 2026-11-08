@@ -13,11 +13,36 @@ whole tool is one wasm binary the browser downloads once and a service worker
 then keeps, so the second visit works with the network off and so does the
 first, once loaded.
 
-```
+```sh
 GOOS=js GOARCH=wasm go build -o web/main.wasm .
 ```
 
 then serve `web/` over HTTP.
+
+## What you can open
+
+A PDF, of course. Also, because somebody who hands a file to a PDF workbench
+wants a PDF of it:
+
+- **a picture** — PNG, JPEG, GIF, WebP, TIFF, BMP, and the less common ICO,
+  ICNS, PNM, QOI, JPEG 2000 and JBIG2. It becomes one page the size of the
+  picture.
+- **a drawing** — an SVG. It goes on the page **as paths**, so it stays sharp at
+  any size and prints at any size. If the drawing uses a gradient, a clip path
+  or an embedded photograph, those cannot be turned into path operators, so the
+  page is a *picture* of the drawing instead — and the workbench says which of
+  the two you got, because only the first keeps its sharpness.
+- **a comic archive** — a `.cbz`, or any zip of pictures. Each picture becomes a
+  page, in the order their **names** put them, so page 10 follows page 2 rather
+  than page 1.
+
+A `.docx` and an `.odt` are zips too. Opening one says what was found —
+*"no pictures in the archive"* — rather than guessing; those formats convert
+through `doc2pdf` rather than here.
+
+Whatever you opened, the document is a PDF from that point on: every verb on the
+ribbon works on it and Save hands back a PDF. A file called `book.cbz` opens as
+`book.pdf`.
 
 ## The ribbon carries the verbs; the panel carries what they are told
 
