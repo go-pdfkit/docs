@@ -52,11 +52,16 @@ front ones.
 
 ## The ribbon carries the verbs; the panel carries what they are told
 
-The commands are a ribbon of eight tabs — **Home**, **Pages**, **Sheet**,
-**Marks**, **File**, **Protect**, **Read**, **Hand over**. Home holds the
-document itself: Open, Save, Rotate, Previous, Next, Delete, and Fill in for a
-document that carries a form. Read is where you look at what a page says; Hand
-over is where you ask for a copy of it in some other form.
+The commands are a ribbon of ten tabs — **Home**, **Pages**, **Sheet**,
+**Marks**, **File**, **Redraw**, **Protect**, **Read**, **Mark up**, **Hand
+over**. Home holds the document itself: Open, Save, Rotate, Previous, Next,
+Delete, and Fill in for a document that carries a form.
+
+The last three are the ones worth telling apart. **Read** is where you look at
+what a page says — read it, search it, copy it — and nothing on it changes the
+document. **Mark up** is where you act on the words you selected: mark them,
+draw on them, comment on them, or alter them. **Hand over** is where you ask for
+a copy of the document in some other form.
 
 That one sentence decides where every control goes. *Turn them* is a verb and
 sits on the ribbon; *a quarter / a half / three quarters* is what it is told
@@ -161,6 +166,22 @@ verb that worked in silence is one you press twice.
 
 All four are real text-markup annotations, so another reader's PDF viewer shows
 them, their notes can be read, and any of them can be taken off again.
+
+### Drawing on a passage
+
+Three verbs on the Mark up tab draw in red over the words you selected:
+
+- **Box them** — a rectangle round the passage, with a little paper between the
+  border and the glyphs.
+- **Ring them** — an ellipse round it, the way somebody circles a word on paper.
+- **Point at them** — an arrow from the margin, stopping just short of the
+  words. It comes from whichever side has room; if neither margin is wide
+  enough, the workbench says how many points it needs rather than drawing a
+  line through the passage, which would be a strike-out and has its own verb.
+
+None of them is drawn *on* the words: a shape over the glyphs hides exactly what
+it is drawing attention to. All three are annotations, so the page underneath is
+untouched and each comes off again by dropping it.
 
 ### Saying something about a passage
 
