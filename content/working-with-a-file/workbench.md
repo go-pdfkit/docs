@@ -162,6 +162,25 @@ verb that worked in silence is one you press twice.
 All four are real text-markup annotations, so another reader's PDF viewer shows
 them, their notes can be read, and any of them can be taken off again.
 
+### Saying something about a passage
+
+A mark says *look here* about words somebody else wrote. To say something of
+your own, type it into **Comment** and press one of:
+
+- **Put a note on it** — a sticky note, the kind that shows as an icon and opens
+  into a pop-up. It goes in the margin beside the passage, never on top of it,
+  because the icon is opaque and would hide exactly the words it is about. If
+  neither margin nor the space above the line has room for it, the workbench
+  says so rather than covering them.
+- **Write in the margin** — the comment itself, written beside the passage where
+  a reader would pencil one, a little smaller than the text it comments on. A
+  margin too narrow to read a comment in is refused, with its width, rather than
+  filled with one word per line.
+
+Both are signed with the **Author** from the File tab, and both leave the page
+untouched: the comment is an annotation, so dropping it gives the paper back
+exactly as it was.
+
 A page is a **picture**, so none of this comes for free. The viewer shows
 rasterised pages and nothing in it is text; the glyphs are read separately and
 placed where they are drawn, from the same layout the pages are rendered from,
