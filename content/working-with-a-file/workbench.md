@@ -189,6 +189,42 @@ page and comes off again, the other takes the text out — but they are the same
 question about *where*, and a reader who highlights a line and then redacts it
 gets the same words both times.
 
+## Redrawing the pages, and what it costs
+
+The File tab has a group called **Redraw the pixels**: **Turn them inside out**
+for reading at night, **Drop the colour**, **Draw them on a colour** (cream for
+reading, grey for proofing, black for the night), **Brighten or deepen them**,
+and **Make them look scanned**. On the Read tab, **Hand it over as a comic**
+writes the pages as a `.cbz`, the archive a comic reader opens as a book.
+
+⛔ **Every one of them replaces each page with a picture of it.** Afterwards
+nothing can select a word, search the document or read it out, and the file
+gets bigger rather than smaller. Each tip says so before you press, and the
+status line says so after: *"⚠ the pages are pictures now: their text cannot be
+selected, searched or read out any more"*.
+
+That is not a shortcoming of these verbs. Turning light into dark is an
+operation on pixels and there is no other way to do it. It is said this loudly
+because the trade is invisible at the moment you make it: the page looks right,
+you save, and what you have kept is a photograph of a document.
+
+So: redraw to **read**, and keep the original. Redraw to **send** only when a
+picture is what you meant to send.
+
+Three things worth knowing before you press:
+
+- **The scanner always does the same thing.** Two runs over the same file give
+  the same pages — the skew, the grain and the fade are fixed, not random — so
+  a redrawn file can be compared, cached or checksummed like any other.
+- **Brightness and contrast are percentages**, and *contrast 100 means leave it
+  alone*. 0 would flatten every page to grey, so it is read as 100 instead.
+- **Choose the colour before pressing** *Draw them on a colour*: with *leave it
+  white* chosen the verb says so rather than redrawing the pages for nothing.
+
+**Hand it over as a comic** and **Hand over every page, zipped** hold the same
+one picture per page. The difference is the name: a comic reader opens the
+`.cbz` and not the `.zip`.
+
 ## Every change is applied, written, and read back
 
 Before it is drawn. So what is on the screen is what would come out of Save,
