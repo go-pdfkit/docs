@@ -44,6 +44,12 @@ Whatever you opened, the document is a PDF from that point on: every verb on the
 ribbon works on it and Save hands back a PDF. A file called `book.cbz` opens as
 `book.pdf`.
 
+The **second** file may be any of these too. **Add a file after this one**, **Lay
+another file over these** and **Mix another file in** take a picture, a drawing
+or an archive exactly as Open does — so a scan goes after a document, a
+signature lays over a page, and a photographed back page interleaves with the
+front ones.
+
 ## The ribbon carries the verbs; the panel carries what they are told
 
 The commands are a ribbon of seven tabs — **Home**, **Pages**, **Sheet**,
@@ -127,10 +133,15 @@ Drag across a page to select its text. **Copy the words** on the Read tab puts
 it on the clipboard and Escape lets go; a press anywhere else — the scrollbar,
 the rail, the panel, a form being filled in — keeps the press it always had.
 
-With words selected, the same tab offers **Highlight**, **Underline** and
-**Strike out**. Each says how much it marked — *"highlighted 17 characters on 1
-page"* — and lets the selection go, because a mark lands in the file rather than
-on the screen, and a verb that worked in silence is one you press twice.
+With words selected, the same tab offers **Highlight**, **Underline**, **Strike
+out** and **Squiggle under** — the wavy line that means *look at this again*,
+which is what a reviewer draws under a sentence they are not striking out. Each
+says how much it marked — *"highlighted 17 characters on 1 page"* — and lets the
+selection go, because a mark lands in the file rather than on the screen, and a
+verb that worked in silence is one you press twice.
+
+All four are real text-markup annotations, so another reader's PDF viewer shows
+them, their notes can be read, and any of them can be taken off again.
 
 A page is a **picture**, so none of this comes for free. The viewer shows
 rasterised pages and nothing in it is text; the glyphs are read separately and
@@ -213,6 +224,19 @@ verbs use. Marking and redacting are opposite acts — one is written over the
 page and comes off again, the other takes the text out — but they are the same
 question about *where*, and a reader who highlights a line and then redacts it
 gets the same words both times.
+
+## Drawing a picture on the pages
+
+**Draw a picture on them**, on the Marks tab, puts a signature on a contract, a
+logo on a letterhead or a seal on a certificate. Choose where it goes and how
+wide it should be, in points, and then choose the picture.
+
+The width is what sizes it, and only the width: the picture keeps its own
+proportions, so a wide logo stays wide. The default is 144 points — two inches,
+which is about what a signature wants on a letter.
+
+It goes on **every page** unless *Which pages* beside it says otherwise, the
+same as a watermark or a stamp.
 
 ## Redrawing the pages, and what it costs
 
