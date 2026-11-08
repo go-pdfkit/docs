@@ -218,6 +218,35 @@ are depends on how the file was produced: the page measured here would report
 three for one line of text, and a page drawing that line in one go would report
 one.
 
+## Replacing the words
+
+**Replace the words**, beside Redact, puts what you typed into **Replace with**
+in place of the words you selected — and the rest of the line stays where it
+was. A shorter replacement does not pull the following text left, and a longer
+one does not push it right.
+
+⛔ It replaces **one piece of text as the page drew it.** A PDF does not hold
+words; it holds drawing operations, and a page is free to make each one a line,
+a word or a single letter. Documents from a word processor usually draw a line
+or a phrase at a time, and those replace cleanly. Documents from a typesetter
+often place every letter separately, and there the workbench says so rather than
+guessing:
+
+> this page draws those words in 15 separate operations, and they can only be
+> replaced one at a time: select one piece of the text, or redact the passage
+> and write the replacement in the margin
+
+It also says no, with the reason, when the words are inside a form shared with
+other pages, when the font is one whose character codes cannot be worked
+backwards, when the replacement uses a character the page's own font does not
+have, and when it would change the number of spaces — in that last case the
+line really would move, and silently.
+
+⛔ **This is the one verb that changes what the document says.** A mark comes
+off, a comment comes off, a redaction announces itself. This puts words in the
+author's mouth, so the status line names both: *"replaced "Hello" with "Hi" on
+page 1"*.
+
 ## Redacting a passage
 
 **Redact**, on the same tab as the selection, takes the selected words **out of
