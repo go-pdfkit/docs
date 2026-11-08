@@ -52,10 +52,11 @@ front ones.
 
 ## The ribbon carries the verbs; the panel carries what they are told
 
-The commands are a ribbon of seven tabs — **Home**, **Pages**, **Sheet**,
-**Marks**, **File**, **Protect**, **Read**. Home holds the document itself:
-Open, Save, Rotate, Previous, Next, Delete, and Fill in for a document that
-carries a form.
+The commands are a ribbon of eight tabs — **Home**, **Pages**, **Sheet**,
+**Marks**, **File**, **Protect**, **Read**, **Hand over**. Home holds the
+document itself: Open, Save, Rotate, Previous, Next, Delete, and Fill in for a
+document that carries a form. Read is where you look at what a page says; Hand
+over is where you ask for a copy of it in some other form.
 
 That one sentence decides where every control goes. *Turn them* is a verb and
 sits on the ribbon; *a quarter / a half / three quarters* is what it is told
@@ -128,6 +129,24 @@ performing a real drag, which is now part of every check: the one thing that
 could not be done from a test was the gesture the feature is made of.
 
 ## Selecting the words on a page, and marking them
+
+### Finding a word, which is the same thing as selecting it
+
+Type into **Find** on the Read tab and press it: the workbench turns to the
+first page carrying the word or phrase and **lights it up as though you had
+dragged across it**. **Find the next one** steps through the rest and starts
+again after the last.
+
+That is the useful part. Because a match *is* a selection, everything that works
+on a selection works on what was found — copy it, highlight it, strike it out,
+or redact it, without touching the mouse.
+
+A phrase may run across several words on a line (*"first chapter"* finds it),
+and the search ignores capitals. It does not match across a **line break**: one
+selection covers one stretch of one line, so a phrase found across two lines
+could not be lit or marked as the thing it claims to be.
+
+### Selecting by hand
 
 Drag across a page to select its text. **Copy the words** on the Read tab puts
 it on the clipboard and Escape lets go; a press anywhere else — the scrollbar,
