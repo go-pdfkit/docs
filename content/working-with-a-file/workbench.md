@@ -234,6 +234,26 @@ ISO 32000-1 §12.5.6.23 is explicit about the difference. A conforming reader
 applying a redaction *"shall remove all traces of the specified content"*, and
 *"clipping or image masks shall not be used to hide that data"*.
 
+{{< callout type="warning" >}}
+**If you redacted a document with a build before 8 November 2026, re-make it.**
+
+Until then the removed words were still in the saved file — not on the page and
+not visible to any PDF reader, but present in an object nothing referenced,
+where `grep` finds them:
+
+```console
+grep -a 'the words you removed' yourfile.pdf
+```
+
+A match means the file was written by an affected build. The fix is in
+go-pdfkit/ops v0.30.0 and in the workbench release that takes it; the defect and
+the affected range are written up in
+[ops#74](https://github.com/go-pdfkit/ops/issues/74).
+
+⛔ Re-redacting the file you already have is not enough if you shared it: the
+leak is in the copy you sent, so that copy is the one to replace.
+{{< /callout >}}
+
 ⛔ **And it refuses, out loud, where it cannot remove the words completely.** The
 refusal names the page and the reason, because that reason is the useful part: a
 reader told *"this line is drawn in one piece, and taking it would take more
