@@ -407,9 +407,8 @@ It refuses a passage that is:
 
 - inside a **form XObject** — those bytes are shared with every page that draws
   it, so cleaning one page would change the others;
-- across an **image** — the spec requires the pixels themselves to be
-  destroyed, which is not yet done, and a mask over them is exactly what the
-  spec forbids;
+- across a **picture this release cannot rewrite** — see below: most are
+  destroyed now, a JPEG is not;
 - under an **annotation** — a note, a highlight or a form field holds text of
   its own, which can be the very words;
 - drawn by **one operator that also draws words outside the selection** —
@@ -419,6 +418,35 @@ It refuses a passage that is:
 The commonest refusal is the one you walk into: **highlight a passage, then
 decide to redact it.** The highlight is an annotation over those words and its
 note can quote them, so it has to go first.
+
+### What happens to a picture under the region
+
+A redaction across a picture **destroys the picture's own samples** and writes
+the picture back. It is not covered and it is not masked, because §12.5.6.23
+says in so many words that *"clipping or image masks shall not be used to hide
+that data"* — and a mask is the image-shaped version of the black rectangle
+this verb exists to replace.
+
+That is the difference between a workbench a reader of **scanned paper** can
+use and one they cannot. A scan is one picture across the whole page, so until
+this the refusal *"across an image"* met every selection they ever made.
+
+It is done for a picture whose samples are plain, eight bits a component, grey
+or RGB, drawn upright and drawn once. The rest are refused **by name**, with
+the reason, and the commonest of them is a **JPEG**: destroying its pixels means
+decoding and re-encoding it, which re-quantises the whole picture and changes
+page size in a way nobody asked for. That one is open as
+[ops#82](https://github.com/go-pdfkit/ops/issues/82), where the plan is the
+lossless path — decode, blank, write back uncompressed — because it is the only
+re-encoding that cannot be accused of changing what was *not* redacted.
+
+{{< callout type="warning" >}}
+**A redacted page looks the same whether this worked or not.** The region is
+painted after the samples are destroyed, so what you see is black either way.
+The only way to tell is to read the saved file — which is what the library's own
+test does, walking **every object** of it and decoding each one, because a
+picture's samples are compressed and a plain search cannot see them.
+{{< /callout >}}
 
 Where the words are is decided **once**, by the same arithmetic the marking
 verbs use. Marking and redacting are opposite acts — one is written over the
