@@ -52,10 +52,19 @@ front ones.
 
 ## The ribbon carries the verbs; the panel carries what they are told
 
-The commands are a ribbon of ten tabs — **Home**, **Pages**, **Sheet**,
-**Marks**, **File**, **Redraw**, **Protect**, **Read**, **Mark up**, **Hand
-over**. Home holds the document itself: Open, Save, Rotate, Previous, Next,
-Delete, and Fill in for a document that carries a form.
+The commands are a ribbon of eleven tabs — **Home**, **Pages**, **Sheet**,
+**Marks**, **File**, **Contents**, **Redraw**, **Protect**, **Read**, **Mark
+up**, **Hand over**. Home holds the document itself: Open, Save, Rotate,
+Previous, Next, Delete, and Fill in for a document that carries a form.
+
+**Contents** is the table of contents a reader navigates by, which the rail down
+the left has always shown and the ribbon could only ever drop. *Bookmark this
+page* adds one entry to the tree already there — titled with the passage you
+selected, if you selected one, and pointing at the page that passage is on.
+*Bookmarks from a file* writes a whole tree from a text file: a title, a tab and
+a page number a line, two spaces of indent per level, which is the file
+`pdfops outline -from` takes, read by the library's own `ops.ParseOutline`
+rather than by a second parser written here.
 
 The last three are the ones worth telling apart. **Read** is where you look at
 what a page says — read it, search it, copy it — and nothing on it changes the
