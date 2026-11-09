@@ -145,6 +145,29 @@ Beside the page rather than over it, because nearly every verb changes the
 document and the document is drawn from what would be saved — typing a crop box
 and watching the page come back cropped is the whole point.
 
+### Turning by an angle that is not a quarter
+
+**Turn them by an angle**, beside *Turn them*, takes the angles the cycle
+button cannot say: any number of degrees, clockwise, added to whatever the page
+already carries.
+
+⛔ **The paper grows and nothing is cut off.** A page turned thirty degrees
+comes back on a bigger sheet, because a sheet that stayed the same size would
+have two corners of the page over its edge. The status line says so —
+*"turned 1 by 30 degrees — the paper grew to hold the corners"* — since that is
+the part nobody expects. It is the one difference from **straightening a
+crooked scan**, which keeps the paper it was given: a fraction of a degree on a
+page whose text sits well inside its margins costs nothing.
+
+A quarter, a half or three quarters still go through the page's own `/Rotate`
+and change nothing else about the file, so text that was selectable stays
+selectable.
+
+⛔ The two controls **share a row**, which is not a matter of taste: given a row
+of its own the angle pushed the Pages panel forty-four pixels past the bottom
+of its box, and a last control that can only be scrolled to is a control people
+do not find. The workbench has a test that measures exactly that.
+
 Every verb is one
 [`toolkit.Action`](https://pkg.go.dev/github.com/go-widgets/toolkit#Action),
 so a verb that cannot run greys on every surface showing it: the arrows at the
