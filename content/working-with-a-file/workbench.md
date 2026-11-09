@@ -75,6 +75,12 @@ view has to hit-test tiles against a moving viewport and decide what a press
 that moved four pixels meant — and because what is held has to be visible
 between the two, which a tile and a status line can say and a drag cannot.
 
+The page picked up is also **the page the other verbs act on**, so turning or
+deleting the page you can see in the grid is a press on the tile and a press on
+the ribbon. Any change to the document puts down what was held: a number is not
+a page, and deleting page 3 while holding page 5 would leave the next press
+moving something nobody pointed at.
+
 **Contents** is the table of contents a reader navigates by, which the rail down
 the left has always shown and the ribbon could only ever drop. *Bookmark this
 page* adds one entry to the tree already there — titled with the passage you
