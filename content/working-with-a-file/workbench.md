@@ -102,8 +102,24 @@ entries that point nowhere and anything past the thousand it reads.
 The last three are the ones worth telling apart. **Read** is where you look at
 what a page says — read it, search it, copy it — and nothing on it changes the
 document. **Mark up** is where you act on the words you selected: mark them,
-draw on them, comment on them, or alter them. **Hand over** is where you ask for
-a copy of the document in some other form.
+draw on them, comment on them, alter them, or **make a fillable field for
+them**. **Hand over** is where you ask for a copy of the document in some other
+form.
+
+*Make a field for this* turns a printed form into one somebody can fill in. A
+blank form is a page of **questions** — *Surname*, *Date of birth* — so selecting
+the question names the field and places it under those words in one gesture: a
+box to type in, or a tick. The name is the words without their punctuation,
+because a field's name travels outside the document, into exported data and into
+whatever script fills the form. The placement is **checked** against the paper
+rather than clamped onto it — under the words, or above them for a question on
+the last line — and a tick is a square.
+
+*Add files after this one* takes as many as you choose, in the order you chose
+them, through a second file input carrying `multiple`. The one every other verb
+shares stays single on purpose: they all want exactly one file, and a picker
+allowing several would hand back a list the code took the first of in silence. A
+file among them that cannot be read stops the merge and says which.
 
 That one sentence decides where every control goes. *Turn them* is a verb and
 sits on the ribbon; *a quarter / a half / three quarters* is what it is told
