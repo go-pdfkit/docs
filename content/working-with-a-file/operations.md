@@ -22,7 +22,7 @@ pages and `1,1` gives two copies.
 
 ## The verbs
 
-Merge, select, delete, reverse, move, rotate, crop, resize, split; n-up,
+Merge, select, delete, reverse, move, rotate, turn by any angle, crop, resize, split; n-up,
 booklet, overlay and underlay, blank pages; watermarks, page numbers, Bates
 stamps and free stamps; placing a picture — a signature, a logo, a seal;
 sanitize, flatten, strip; compress, encrypt, decrypt and permissions;
@@ -31,6 +31,27 @@ straightening a scan; and reading a page back as text or as pictures.
 `place` is what "sign a PDF" means in every tool that offers it: a picture of
 a signature, put where you say. It is not cryptography and does not claim to
 be — a drawn squiggle proves nothing about who drew it.
+
+## Turning a page by any angle
+
+`rotate` writes a number on the page — `/Rotate`, a multiple of ninety — and
+`turn` rewrites the page onto a sheet of its own, for every angle in between.
+
+```sh
+pdfops turn -by 30 tilted.pdf turned.pdf
+pdfops turn -pages 2,5-7 -by -1.5 scan.pdf nudged.pdf
+```
+
+⛔ **The paper grows and nothing is cut off.** The sheet is the turned page's
+bounding box — `w·|cos θ| + h·|sin θ|` across, `w·|sin θ| + h·|cos θ|` down —
+and the page is centred on it. That is the difference from straightening a
+scan, below, which keeps the paper it was given.
+
+An angle that is a multiple of ninety goes through `/Rotate` and nothing else
+happens: no transformation, no new content stream, and text that was selectable
+stays selectable.
+
+**Positive is clockwise**, as ISO 32000-1 Table 30 and `Rotate` already mean it.
 
 ## Straightening a scan
 
