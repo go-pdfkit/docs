@@ -81,6 +81,20 @@ the ribbon. Any change to the document puts down what was held: a number is not
 a page, and deleting page 3 while holding page 5 would leave the next press
 moving something nobody pointed at.
 
+**The page menu opens over a tile**, too. A secondary press on one gives the
+same short menu the reading carries — *Rotate*, *Delete*, *Insert a blank
+page*, *Hand over this page*, *Show the page again* — and it acts on **the page
+under the pointer**, not
+over the page the reading happens to be showing. The grid always knew where its
+tiles were; the menu now asks it before falling back to the reading, because a
+tile *is* a page and pointing at one is the plainest way to say which.
+
+⛔ **It goes to that page first, and its top row names it.** The verbs act on
+the page being read, so a menu that opened without moving would sit over tile 7
+and turn page 1. The greyed *Page 7* at the top is there for the opposite
+mistake: a menu opened over the wrong tile has to be readable as such before
+anything is pressed.
+
 **Contents** is the table of contents a reader navigates by, which the rail down
 the left has always shown and the ribbon could only ever drop. *Bookmark this
 page* adds one entry to the tree already there — titled with the passage you
