@@ -412,6 +412,19 @@ Three things worth knowing before you press:
 one picture per page. The difference is the name: a comic reader opens the
 `.cbz` and not the `.zip`.
 
+**Split and hand them over** gives the pieces in one zip as well, and for the
+same reason: a browser asks about each download separately, so a 200-page
+document split into twenties was ten prompts, each refusable on its own —
+leaving somebody with four pieces and no way of knowing which four. One piece
+is handed over as the PDF itself, since a zip holding a single file is a
+wrapper to open for nothing. Nothing is changed by it: the pieces are copies of
+what stays open.
+
+A **stamp** may say what it is being drawn on. `{page}`, `{pages}` and `{n}` are
+filled in for every stamp, not only for *Number them* — so a stamp at *top
+centre* reading `Report — {page} of {pages}` is a header with a page number in
+it, and one at *bottom centre* is a footer.
+
 ## Every change is applied, written, and read back
 
 Before it is drawn. So what is on the screen is what would come out of Save,
