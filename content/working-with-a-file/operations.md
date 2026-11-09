@@ -150,7 +150,39 @@ has been walked. A row more than one level under the row before it is a
 `*ops.DepthError` naming the row. The browser workbench reads a document's own
 bookmarks that way before adding one to them, and `pdfops outline -from` reads
 the file; both go through the same code, so there is one grammar rather than
-two that have to be kept in step.
+two that have to be kept in step. `ops.Flatten` is `Nest` the other way round.
+
+### The printed kind
+
+The `/Outlines` tree is the table of contents a reader *navigates* by.
+`Doc.ContentsPage` writes the one that gets **printed** — a page with a line for
+each entry, its page number at the right and dots leading to it — from the same
+entries:
+
+```go
+n, err := doc.ContentsPage(marks, ops.ContentsOptions{})
+if err != nil {
+    return err
+}
+doc.SetOutline(ops.ShiftBookmarks(marks, 1, n)) // if you want both
+```
+
+⛔ **The numbers it prints are moved by the pages it adds.** A contents page put
+in front of a document pushes every page of it down, so an entry that pointed at
+page 7 is on page 8 afterwards, and printing the 7 would send a reader one page
+short of every heading in the book. `ContentsPage` returns how many pages it
+added, and `ShiftBookmarks(marks, from, by)` is the same rule for the tree —
+a function rather than a line in each caller because of its edge: an entry
+pointing at a page *before* the insertion has not moved, and shifting that too
+goes wrong in exactly the documents that have a preface.
+
+It runs onto as many pages as it needs, and refuses rather than printing a line
+whose title has no room at all: a page number with nothing to read beside it
+cannot be told from a document whose headings have no names. The refusal comes
+before a page is inserted, so a document that was refused is untouched.
+
+`pdfops contents -from toc.txt -bookmarks book.pdf out.pdf` does both from one
+file, and `-title`, `-before`, `-size` and `-margin` set the rest.
 
 ## On the command line
 

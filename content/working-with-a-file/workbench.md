@@ -66,6 +66,15 @@ a page number a line, two spaces of indent per level, which is the file
 `pdfops outline -from` takes, read by the library's own `ops.ParseOutline`
 rather than by a second parser written here.
 
+*Write a contents page* is the other kind of table of contents: the **printed**
+one, a page at the front with a line for each bookmark, its page number at the
+right and dots leading to it, built from the entries the rail is already
+showing. The numbers account for the page it adds. It does not rewrite the
+bookmarks — `ops` carries a document's own outline over and remaps each entry to
+the page object it still points at, so the tree follows its pages across the
+insertion, where writing it back from the workbench's own walk would lose the
+entries that point nowhere and anything past the thousand it reads.
+
 The last three are the ones worth telling apart. **Read** is where you look at
 what a page says — read it, search it, copy it — and nothing on it changes the
 document. **Mark up** is where you act on the words you selected: mark them,
