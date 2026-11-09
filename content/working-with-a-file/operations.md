@@ -126,6 +126,32 @@ working and drops the rest rather than pointing them at nothing.
 `Doc.SetOutline` writes an outline of your own instead, which is what a
 document assembled from several files needs.
 
+A table of contents is usually written down before it is a tree, so the grammar
+for that lives in the library rather than in the command:
+
+```go
+marks, err := ops.ParseOutline("Introduction\t1\n  Why\t2\nChapter one\t7\n")
+if err != nil {
+    return err // "line 3: expected a title, a tab and a page number"
+}
+doc.SetOutline(marks)
+```
+
+One entry a line — a title, a **tab**, a page number — with two spaces of indent
+for each level under another. A line it cannot read is an error **naming the
+line**, because a table of contents quietly missing an entry is worse than one
+that refuses to be written: the first is a document that looks finished and
+sends a reader to the wrong page.
+
+`ops.Nest([]Level) ([]Bookmark, error)` is the same function without the parser
+in front of it, for a caller that already has the entries — a title, a page and
+a depth in reading order, which is what an `/Outlines` tree looks like once it
+has been walked. A row more than one level under the row before it is a
+`*ops.DepthError` naming the row. The browser workbench reads a document's own
+bookmarks that way before adding one to them, and `pdfops outline -from` reads
+the file; both go through the same code, so there is one grammar rather than
+two that have to be kept in step.
+
 ## On the command line
 
 ```
