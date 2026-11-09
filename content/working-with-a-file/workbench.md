@@ -52,10 +52,28 @@ front ones.
 
 ## The ribbon carries the verbs; the panel carries what they are told
 
-The commands are a ribbon of eleven tabs — **Home**, **Pages**, **Sheet**,
-**Marks**, **File**, **Contents**, **Redraw**, **Protect**, **Read**, **Mark
+The commands are a ribbon of twelve tabs — **Home**, **Pages**, **Sheet**,
+**Marks**, **Stamp**, **File**, **Contents**, **Redraw**, **Protect**, **Read**, **Mark
 up**, **Hand over**. Home holds the document itself: Open, Save, Rotate,
 Previous, Next, Delete, and Fill in for a document that carries a form.
+
+**Marks** and **Stamp** are two halves of one subject, split because the Marks
+panel ran out of room: Marks writes the same thing across every page by a rule —
+a watermark, a page number, a Bates serial — and Stamp puts something where you
+*choose*. That is the question the *Where it goes* chooser asks, and a picture
+asks it too, so the picture is there with them. `{page}`, `{pages}` and `{n}`
+are filled in for **any** stamp, not only for *Number them*, which is what makes
+a stamp at *top centre* a header with a page number in it; *Head and foot them*
+writes both at once, each from its own box, with an empty box writing nothing
+there.
+
+**Pages** holds **Arrange the pages**: every page as a grid of tiles where the
+page was. Press one to pick it up, press the page it should go **in front of**,
+and it goes there. The tile that is lit is the one being held, not the one being
+read. Two presses rather than a drag, because a drag over a grid inside a scroll
+view has to hit-test tiles against a moving viewport and decide what a press
+that moved four pixels meant — and because what is held has to be visible
+between the two, which a tile and a status line can say and a drag cannot.
 
 **Contents** is the table of contents a reader navigates by, which the rail down
 the left has always shown and the ribbon could only ever drop. *Bookmark this
@@ -421,18 +439,19 @@ Three things worth knowing before you press:
 one picture per page. The difference is the name: a comic reader opens the
 `.cbz` and not the `.zip`.
 
-**Split and hand them over** gives the pieces in one zip as well, and for the
-same reason: a browser asks about each download separately, so a 200-page
-document split into twenties was ten prompts, each refusable on its own —
-leaving somebody with four pieces and no way of knowing which four. One piece
+**Split and hand them over** is on this tab too, and gives the pieces in one zip
+for the same reason: a browser asks about each download separately, so a
+200-page document split into twenties was ten prompts, each refusable on its own
+— leaving somebody with four pieces and no way of knowing which four. One piece
 is handed over as the PDF itself, since a zip holding a single file is a
 wrapper to open for nothing. Nothing is changed by it: the pieces are copies of
-what stays open.
+what stays open, which is the sentence every verb on this tab answers to.
 
 A **stamp** may say what it is being drawn on. `{page}`, `{pages}` and `{n}` are
 filled in for every stamp, not only for *Number them* — so a stamp at *top
 centre* reading `Report — {page} of {pages}` is a header with a page number in
-it, and one at *bottom centre* is a footer.
+it, and one at *bottom centre* is a footer. *Head and foot them* writes both at
+once from two boxes of their own.
 
 ## Every change is applied, written, and read back
 
