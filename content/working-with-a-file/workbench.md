@@ -88,6 +88,27 @@ so a verb that cannot run greys on every surface showing it: the arrows at the
 ends of a document, Delete on a document of one page, Fill in without a form,
 everything with nothing open.
 
+### What the file says about itself
+
+The **File** tab both shows and writes the document information dictionary.
+*Show what it says* puts every entry of it where the page was, with how big each
+page is and whether the structure had to be rebuilt to read the file at all;
+*Say so in the file* writes the six text entries the panel offers boxes for —
+title, author, subject, keywords, creator, producer — and an empty box removes
+that entry, which is the only way to clear one without dropping them all.
+
+Two rules the panel keeps, both earned:
+
+- a box is filled from the **uncut** value. The panel clips what it *shows* to
+  120 runes and an ellipsis, and a box filled from that and written back would
+  cut the file's own value down by way of displaying it. An entry too long for a
+  box is shown instead, under a caption saying so, and written back exactly as
+  it came.
+- the two **dates** are shown as the file wrote them and cannot be typed. A PDF
+  date is `D:YYYYMMDDHHmmSSOHH'mm` (ISO 32000-1, 7.9.4), nothing in this fleet
+  parses one, and a box to type a date into is a box in which somebody writes
+  something no PDF reader will show.
+
 ## Finding your way around
 
 Down the left there is a rail you can widen by dragging its divider. It holds
