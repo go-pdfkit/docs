@@ -3,8 +3,9 @@ title: "The browser workbench"
 weight: 70
 ---
 
-[`app`](https://github.com/go-pdfkit/app) is a PDF workbench that runs in a
-browser tab and nowhere else.
+[`playground`](https://github.com/go-pdfkit/playground) is a PDF workbench that
+runs in a browser tab and nowhere else, at
+<https://go-pdfkit.github.io/playground/>.
 
 Open a file, turn its pages, rotate one, drop one, lay it out two to a sheet,
 write across it, strip what runs rather than shows, save it back out — and

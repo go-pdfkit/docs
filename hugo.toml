@@ -60,7 +60,7 @@ enableGitInfo = true
 
 [[menu.main]]
   name = "Workbench"
-  url = "https://go-pdfkit.github.io/app/"
+  url = "https://go-pdfkit.github.io/playground/"
   weight = 2
 
 [[menu.main]]
