@@ -22,7 +22,8 @@ pages and `1,1` gives two copies.
 
 ## The verbs
 
-Merge, select, delete, reverse, move, rotate, turn by any angle, crop, resize, split; n-up,
+Merge, select, delete, reverse, move, rotate, turn by any angle, compare two
+versions, crop, resize, split; n-up,
 booklet, overlay and underlay, blank pages; watermarks, page numbers, Bates
 stamps and free stamps; placing a picture — a signature, a logo, a seal;
 sanitize, flatten, strip; compress, encrypt, decrypt and permissions;
@@ -31,6 +32,43 @@ straightening a scan; and reading a page back as text or as pictures.
 `place` is what "sign a PDF" means in every tool that offers it: a picture of
 a signature, put where you say. It is not cryptography and does not claim to
 be — a drawn squiggle proves nothing about who drew it.
+
+## Saying what changed between two versions
+
+`compare` reads two documents against each other.
+
+```sh
+pdfops compare draft1.pdf draft2.pdf
+```
+
+```text
+- -> 2    page added
+2 -> 3    text removed       zeta
+2 -> 3    text added         theta
+2 of 3 page(s) changed
+```
+
+⛔ **The pages are paired by what they say, not by their numbers.** A page
+inserted in the middle moves nothing after it: the pages that follow are still
+paired with the pages they came from, and the insertion is one *page added*.
+Pairing by number would report that page as an edit of the next, that one as an
+edit of the one after, and so on to the end — every page of the document
+changed, which is both useless and false.
+
+A pair has to share **half its words**, or it is one page removed and another
+added: without that floor a replaced chapter reads as a rewrite of the one
+before it.
+
+Inside a pair the diff is **Myers** (*An O(ND) Difference Algorithm and Its
+Variations*, Algorithmica **1** (1986) 251–266) over words, and words that
+changed together are reported together — *"quick brown fox"* → *"slow grey
+mole"* is two changes, not six. Pictures are told apart by a **hash of their
+samples**, so a swapped logo of the same size is a change; annotations by their
+subtype and their text.
+
+⛔ `compare` **exits 0 whether or not the documents differ**, unlike `diff`: in
+this command an exit of 1 means the work could not be done, and a document that
+changed is the work being done. The answer is in the last line, in words.
 
 ## Turning a page by any angle
 

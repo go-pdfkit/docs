@@ -145,6 +145,29 @@ Beside the page rather than over it, because nearly every verb changes the
 document and the document is drawn from what would be saved — typing a crop box
 and watching the page come back cropped is the whole point.
 
+### Comparing this document with an earlier version
+
+**Compare with a file**, on the Read tab, asks for another version and reads
+what changed between it and the one on the screen: pages added or dropped,
+words, pictures and comments. It is a **reading**, like the text and the grids
+— it replaces the picture of the page, and pressing the verb again puts the
+page back.
+
+⛔ **The direction is said out loud, in the report.** A comparison has two
+documents in it, and a reader who has the order backwards reads every addition
+as a deletion. The file chosen is the **earlier** version, the document open is
+the later one, and the heading says *"the left page is draft1.pdf; the right
+page is this document"* rather than leaving it to be worked out from the page
+numbers.
+
+⛔ **Any change to the document drops the report.** It names pages and
+differences; after a page is dropped it names pages that are not there, while
+looking exactly as authoritative as it did a second earlier.
+
+What it compares is what **Save** would write — a form that has been filled in
+is saved as the file it came from with the answers appended, and those are not
+the same bytes as the rebuilt document.
+
 ### Turning by an angle that is not a quarter
 
 **Turn them by an angle**, beside *Turn them*, takes the angles the cycle
