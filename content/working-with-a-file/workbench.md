@@ -478,14 +478,35 @@ That is the difference between a workbench a reader of **scanned paper** can
 use and one they cannot. A scan is one picture across the whole page, so until
 this the refusal *"across an image"* met every selection they ever made.
 
-It is done for a picture whose samples are plain, eight bits a component, grey
-or RGB, drawn upright and drawn once. The rest are refused **by name**, with
-the reason, and the commonest of them is a **JPEG**: destroying its pixels means
-decoding and re-encoding it, which re-quantises the whole picture and changes
-page size in a way nobody asked for. That one is open as
-[ops#82](https://github.com/go-pdfkit/ops/issues/82), where the plan is the
-lossless path — decode, blank, write back uncompressed — because it is the only
-re-encoding that cannot be accused of changing what was *not* redacted.
+{{< callout type="warning" >}}
+**This page said that before it was true, and the gap was the JPEG.** Every
+scanner writes `DCTDecode`, so a reader who opened their own scan still met a
+refusal while this paragraph told them the case was handled. The page they
+could redact was the page nobody has. Fixed in
+[ops v0.38.0](https://github.com/go-pdfkit/ops/releases/tag/v0.38.0), and the
+test that now stands for it feeds a **JPEG** rather than the unfiltered picture
+the old one used.
+{{< /callout >}}
+
+It is done for a picture whose samples are plain or a **JPEG**, eight bits a
+component, grey or RGB, drawn upright and drawn once. A turned one, one drawn
+twice, one carrying a mask or a palette are refused **by name**, with the
+reason.
+
+A JPEG is written back as **plain samples**, not as another JPEG. Re-encoding
+re-quantises block by block, so the blanked picture would come back with every
+block changed — the whole photograph degraded in order to destroy a corner of
+it. What is written instead is exactly what a reader of the original would have
+seen, with the region destroyed; it is the only rewrite that cannot be accused
+of changing what was *not* redacted. The picture loses its compression and the
+file grows, which is the trade.
+
+Two refusals belong to that path: a **CMYK** JPEG, because there is no faithful
+conversion to RGB without the output profile the file does not carry, and
+anything past **100 megapixels**, because a JPEG declares its size in a handful
+of bytes and a decoder then allocates `width × height × 3` — thirty-nine bytes
+can ask for 1.2 GB, so the size is read from the header and refused before
+anything is decoded.
 
 {{< callout type="warning" >}}
 **A redacted page looks the same whether this worked or not.** The region is
