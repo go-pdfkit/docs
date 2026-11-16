@@ -48,6 +48,45 @@ out, _ := w.Finish(reader.Dict{"Root": root})
 `Writer.Copy` brings an object across from another document with everything
 it refers to.
 
+## Linearizing
+
+`Document.Linearize` rewrites an open document as a **linearized** file — ISO
+32000-1 Annex F's eleven parts, so that a reader with byte-range requests can
+show page one before the rest arrives:
+
+```go
+d, _ := reader.Open(in)
+out, err := d.Linearize()
+```
+
+It writes both cross-reference sections, the parameter dictionary, and a hint
+stream carrying Table F.3's page offset table and Table F.5's shared object
+hint table. `qpdf --check` reports nothing about the result that it does not
+also report about the input.
+
+{{< callout type="warning" >}}
+**It refuses a document that shares an object between pages,** and that is most
+multi-page PDFs. The shared object hint table (F.4.2) is how a page after the
+first says which objects it depends on, and this version writes a valid but
+**empty** one — true of a document whose pages are independent, and a
+contradiction for one whose pages are not, so `Linearize` returns an error
+naming the objects instead of writing a hint table that disagrees with the file.
+
+The route that catches most files is **inheritance**: Table 30 lets a page omit
+`/Resources`, `/MediaBox`, `/CropBox` and `/Rotate` and take the page tree's,
+and one `/Resources` on the pages node is reached by every page.
+
+Written today: a one-page document; inheritable values that are **direct** (an
+inline `/MediaBox` array refers to no object); each page naming its **own**
+resources; and a sub-tree whose reference has one page under it. Pages that
+share only the catalogue are written too — part 4 arrives ahead of the first
+page, so nothing has to describe it.
+{{< /callout >}}
+
+`Linearized` reads the parameter dictionary of a file somebody else wrote, and
+`CheckLinearized` holds every parameter against the document — the two were
+built before the writer, so that it would not be its own judge.
+
 ## What the corpus says
 
 Of **118 863** files, 118 833 open. The thirty that do not are 27 PNGs named
