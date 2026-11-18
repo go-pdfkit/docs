@@ -30,8 +30,8 @@ in words, the handler's revision, what it allows, and whether the password it
 opened with was the owner's.
 
 A predictor's row geometry is read from the file, so it is **refused when the
-stream cannot back it**: a hundred-byte stream declaring `/Columns 977777777`
-asks for a row of 932 MiB, and two of them at once. Past a megabyte, a row must
+stream cannot back it**: a 102-byte *file* declaring `/Columns 977777777` asks
+for a row of 932 MiB, and two of them at once. Past a megabyte, a row must
 be backed by at least as many bytes as it claims; below that floor a short row
 is still salvaged and zero-filled, because a damaged last row is legitimately
 shorter than the bytes it needs. An absolute cap cannot express this — the
