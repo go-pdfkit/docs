@@ -64,28 +64,40 @@ stream carrying Table F.3's page offset table and Table F.5's shared object
 hint table. `qpdf --check` reports nothing about the result that it does not
 also report about the input.
 
-{{< callout type="warning" >}}
-**It refuses a document that shares an object between pages,** and that is most
-multi-page PDFs. The shared object hint table (F.4.2) is how a page after the
-first says which objects it depends on, and this version writes a valid but
-**empty** one — true of a document whose pages are independent, and a
-contradiction for one whose pages are not, so `Linearize` returns an error
-naming the objects instead of writing a hint table that disagrees with the file.
+**Documents whose pages share objects are written** since v0.18.0, and that is
+most multi-page PDFs. The route that reaches nearly all of them is
+**inheritance**: Table 30 lets a page omit `/Resources`, `/MediaBox`, `/CropBox`
+and `/Rotate` and take the page tree's, so one `/Resources` on the pages node is
+reached by every page. The shared object hint table (F.4.2) now says which of
+part 6's and part 8's objects each page after the first depends on, in the two
+runs Table F.5 describes: every first-page object, counted positionally from
+`/O`, then the objects shared only between later pages.
 
-The route that catches most files is **inheritance**: Table 30 lets a page omit
-`/Resources`, `/MediaBox`, `/CropBox` and `/Rotate` and take the page tree's,
-and one `/Resources` on the pages node is reached by every page.
+Earlier versions **refused** such a document. The table was written valid but
+**empty** — true of a document whose pages are independent and a contradiction
+for one whose pages are not — so `Linearize` returned an error rather than a
+hint table that disagreed with the file.
 
-Written today: a one-page document; inheritable values that are **direct** (an
-inline `/MediaBox` array refers to no object); each page naming its **own**
-resources; and a sub-tree whose reference has one page under it. Pages that
-share only the catalogue are written too — part 4 arrives ahead of the first
-page, so nothing has to describe it.
+{{< callout type="info" >}}
+**What it still does not say is _where_ in a page a shared object is first
+used.** F.4.1 items 5 and 13 are a fraction for that position, and this writer
+states `0/1`: at the beginning. A reader may therefore fetch a shared object
+earlier than it needs it, never later — a loss of precision rather than a wrong
+answer.
+
+Two more values are deliberately coarse. Every group describes exactly **one**
+object, where F.4.2 allows a run of adjacent ones, which costs a few bytes and
+cannot describe the wrong bytes. And a page that **borrows** a content stream
+from an earlier page gets `0` for Table F.4's items 6 and 7: the stream lies
+before the page, the items are unsigned, and no value is representable — the
+same `0` a page with no content stream at all receives.
 {{< /callout >}}
 
 `Linearized` reads the parameter dictionary of a file somebody else wrote, and
 `CheckLinearized` holds every parameter against the document — the two were
-built before the writer, so that it would not be its own judge.
+built before the writer, so that it would not be its own judge. `CheckLinearized`
+recomputes the page and shared group **lengths** from the file; it does not yet
+recompute Table F.5's first shared object offset, which `qpdf --check` does.
 
 ## What the corpus says
 
