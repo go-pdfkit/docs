@@ -2,3 +2,9 @@
 public/
 resources/
 .hugo_build.lock
+
+# ⛔ A background command's log. The rule that keeps such logs out of volatile
+# directories sends them HERE, where `git add -A` sweeps them into a commit —
+# which happened once in go-pdfkit/reader and had to be corrected. One of these
+# was sitting untracked in this clone when this line was written.
+.prwait-*.log
