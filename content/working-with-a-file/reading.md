@@ -107,6 +107,79 @@ built before the writer, so that it would not be its own judge. `CheckLinearized
 recomputes the page and shared group **lengths** from the file; it does not yet
 recompute Table F.5's first shared object offset, which `qpdf --check` does.
 
+## Digital signatures
+
+Since v0.20.0, `reader` **reads and verifies** a PDF's digital signatures
+(ISO 32000-1 12.7.4.5). `Document.Signatures` lists the signature fields that
+hold a signature: it walks `/AcroForm /Fields` and `/Kids`, bounded in depth and
+in field count, and returns one `Signature` per signed field — the field name,
+`/Filter`, `/SubFilter`, `/ByteRange`, the `/Contents` DER, the signer's claimed
+`/Name`, `/Reason`, `/Location` and `/M`, `DictionarySigned` and
+`CoversWholeFile`. `Document.SignedBytes` returns the bytes a signature covers,
+after checking the `/ByteRange` against the file. Verification lives in the
+sub-package `reader/signature`, on top of
+[`go-authn/cms`](https://github.com/go-authn/cms):
+
+```go
+d, err := reader.Open(file)
+// ...
+results, err := signature.VerifyAll(d)
+// ...
+for _, r := range results {
+    fmt.Println(r.Signature.Field, r.Err == nil, r.Signature.CoversWholeFile)
+    // r.Certificates: hand to crypto/x509 and a revocation checker
+}
+```
+
+`signature.Verify(d, sig)` does one signature. A bad signature does not hide the
+others: `Signature.Err` holds the refusal and `VerifyAll` goes on.
+`Signatures` itself fails only on a form too large or too deep to walk
+(`reader.ErrTooManyFields`).
+
+**What is verified.** `adbe.pkcs7.detached` and `ETSI.CAdES.detached`: every
+signer's signature over exactly the `/ByteRange` bytes, by the certificate the
+CMS names. Every other `/SubFilter` is refused with an error wrapping
+`signature.ErrUnsupported`, and so are `adbe.pkcs7.sha1` and
+`adbe.x509.rsa_sha1`: SHA-1 is refused by name. That is the one deliberate
+difference from poppler's `pdfsig`, which calls a SHA-1 signature valid.
+
+**A `/ByteRange` the file does not bear out is refused** (`reader.ErrByteRange`).
+That is the signature-wrapping class of attacks: not exactly two ranges, a
+negative number, a first range that does not start at 0, ranges that overlap,
+descend or touch, a range past the end of the file, or a gap that is not exactly
+one `<hex>` string.
+
+**"Valid" and "the whole document" are two answers.** `CoversWholeFile` says
+whether the ranges end at the end of the file. A signature followed by an
+incremental update is valid and not whole; that is how forms are filled and
+signatures stacked, and judging what the update changed is the caller's.
+
+**What the signature covers.** `/Name`, `/Reason`, `/Location` and `/M` are
+reported only when `DictionarySigned` is true, that is, when the signature
+dictionary lies inside the signed ranges. An incremental update can point `/V`
+at a new dictionary that copies the original `/ByteRange` and `/Contents` and
+forges those claims, and the signature still verifies; so they are left empty
+otherwise. The field name is never signed.
+
+**Bounded per document.** `VerifyAll` verifies at most **64 distinct
+signatures** and **1 GiB of signed bytes**; the rest come back with an error
+wrapping `signature.ErrTooManySignatures`. The gaps of one document may decode
+to 32 MiB in total.
+
+{{< callout type="warning" >}}
+**Trust is the caller's.** Whether the signing certificate chains to something
+you trust, was valid when the signature was made, and was not revoked is not
+decided here, as in `go-authn/cms`; nor is the signing time, which `/M` merely
+claims.
+{{< /callout >}}
+
+It was checked against poppler's `pdfsig` 26.10.0 on fixtures signed by
+OpenSSL: RSA, ECDSA and CAdES signatures valid; a file with an incremental update
+after the signature, whose earlier signature is valid and not whole-file; two
+stacked signatures; and seven tamperings of one fixture, refused by both. The
+"whole document" answer is compared with `pdfsig` only where both say the
+signature is valid. No encrypted signed file was checked against `pdfsig`.
+
 ## What the corpus says
 
 Of **118 863** files, 118 833 open. The thirty that do not are 27 PNGs named
