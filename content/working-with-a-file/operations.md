@@ -31,7 +31,8 @@ straightening a scan; and reading a page back as text or as pictures.
 
 `place` is what "sign a PDF" means in every tool that offers it: a picture of
 a signature, put where you say. It is not cryptography and does not claim to
-be — a drawn squiggle proves nothing about who drew it.
+be — a drawn squiggle proves nothing about who drew it. For a cryptographic
+signature, see [Signing a document](#signing-a-document).
 
 ## Saying what changed between two versions
 
@@ -242,6 +243,76 @@ before a page is inserted, so a document that was refused is untouched.
 
 `pdfops contents -from toc.txt -bookmarks book.pdf out.pdf` does both from one
 file, and `-title`, `-before`, `-size` and `-margin` set the rest.
+
+## Signing a document
+
+Since [ops v0.39.0](https://github.com/go-pdfkit/ops/releases/tag/v0.39.0),
+`ops.Sign` adds a **digital signature** (ISO 32000-1 12.8) — cryptography, as
+opposed to the picture `place` puts down. It is written as an incremental
+update: the original bytes stay the start of the result, so every earlier
+signature still verifies. The signature is a detached CMS from
+[go-authn/cms](https://github.com/go-authn/cms), made with an RSA, RSA-PSS,
+ECDSA or Ed25519 key, under the sub-filter `adbe.pkcs7.detached` or
+`ETSI.CAdES.detached`.
+
+```go
+signed, err := ops.Sign(pdf, ops.SignOptions{
+	Signer: key, Certificate: cert, Chain: intermediates, // RSA, ECDSA or Ed25519
+	Field:  "approval",          // an existing empty signature field, or a new invisible one
+	Reason: "I agree", Location: "Paris",
+	SubFilter: ops.PKCS7Detached, // or ops.CAdESDetached
+})
+```
+
+From the command line, with PEM files (a PKCS #8, PKCS #1 or SEC 1 key):
+
+```
+pdfops sign -key key.pem -cert cert.pem -reason "I agree" contract.pdf signed.pdf
+pdfops sign -key key.pem -cert cert.pem -chain ca.pem -field approval -subfilter cades form.pdf signed.pdf
+```
+
+The other flags are `-page` (the page a new field goes on; the first by
+default), `-name` and `-contact` (what the signer claims), `-hash` (`sha256`,
+`sha384` or `sha512`; `sha256` when empty), `-pss` (RSASSA-PSS for an RSA
+key) and `-reserve` (bytes of room for the CMS; `0` measures it by signing
+once beforehand).
+
+### What it refuses
+
+Each refusal is a sentinel error, to be tested with `errors.Is`:
+
+| Error | Refused because |
+|---|---|
+| `ErrEncrypted` | the document is encrypted: 32000-1 does not exempt `/Contents` from encryption, so nothing is guessed |
+| `ErrReserveTooSmall` | the signature is larger than its reserve |
+| `ErrReserveTooLarge` | the reserve is above 1 MiB, refused before anything is allocated |
+| `ErrTooManyObjects` | the update would be numbered past the 8,388,607 objects of ISO 32000-1 Annex C |
+| `ErrFieldSigned` | the field already holds a signature |
+| `ErrNotSignatureField` | the field name belongs to some other kind of field |
+| `ErrNoSigner` | the signer or the certificate is nil |
+| `ErrNotReadable` | the input is not a readable PDF |
+| `ErrNotAppendable` | the file cannot be appended to: no usable `startxref`, or one that had to be repaired to be read |
+
+The command line also refuses key and certificate files over 1 MiB, inputs
+over 1 GiB, and an encrypted key.
+
+### What is not claimed
+
+- **No PAdES baseline.** `ETSI.CAdES.detached` is written, but conformance to a
+  PAdES baseline profile is not claimed: that standard has not been checked.
+- **No timestamps and no LTV.** There is no signing-time attribute (the time is
+  `/M`) and no validation data.
+- **No visible appearance.** A new field is an invisible widget.
+- **No encrypted input.** `ErrEncrypted`, above.
+- **No trust.** Whether a certificate is trusted is the verifier's question;
+  the tests sign with self-signed certificates.
+
+⛔ **poppler's `pdfsig` reports an Ed25519 signature as Invalid.** Its NSS
+backend does not accept it, while `reader/signature` (see
+[reading a file](../reading/#digital-signatures)) and
+`openssl cms -verify` accept the same bytes. RSA and ECDSA signatures are
+valid in `pdfsig`, the last one reported as "Total document signed". Use RSA or
+ECDSA when the reader is poppler.
 
 ## On the command line
 

@@ -42,7 +42,7 @@ re-parse or subsetter of its own. See
 | Repo | What it is |
 | --- | --- |
 | [`reader`](https://github.com/go-pdfkit/reader) | reads and writes the format itself: objects, cross-reference tables and streams, filters, encryption, the page tree, content streams — and a writer that produces the same bytes twice |
-| [`ops`](https://github.com/go-pdfkit/ops) | the verbs, and the `pdfops` command: merge, split, rotate, crop, n-up, watermark, encrypt, and reading a page back |
+| [`ops`](https://github.com/go-pdfkit/ops) | the verbs, and the `pdfops` command: merge, split, rotate, crop, n-up, watermark, encrypt, sign, and reading a page back |
 | [`render`](https://github.com/go-pdfkit/render) | turns a page into pixels: paths, images, text in every font flavour, functions, shadings and patterns |
 | [`pdffont`](https://github.com/go-pdfkit/pdffont) | what a document says about a font — encodings, widths, and what text a code stands for |
 | [`extract`](https://github.com/go-pdfkit/extract) | reads a page back: the text with where it sits, and the pictures with the box each covers |
