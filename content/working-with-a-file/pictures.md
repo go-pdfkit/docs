@@ -25,6 +25,84 @@ $ pdfconv from-pdf -format webp -quality 80 -o pages/ report.pdf
 $ pdfconv formats
 ```
 
+## A PDF page as SVG
+
+Since `convert` v0.17.0 a page can also come back as a **drawing** instead of
+pixels:
+
+```
+$ pdfconv to-svg [-pages 1,3,5-9] [-password-file f|-] [-o dir] in.pdf
+$ pdfconv to-svg -pages 1-3 -o ./svg scan.pdf      # scan_svg.zip
+$ pdfconv to-svg -pages 2 -o ./svg scan.pdf        # scan.svg
+```
+
+One selected page is `name.svg`; several are `name_svg.zip` holding
+`page_N.svg`, the way BentoPDF names them. `-pages` is an addition (BentoPDF
+offers no page selection). The shape follows the pages *selected*, so `-pages 2`
+of a long file is a single `.svg`. One PDF is one run: BentoPDF also takes
+several PDFs at once into one zip, and this does not.
+
+In Go, `convert.StreamSVG` hands the pages over one at a time,
+`convert.NewSVGArchive` writes the zip as they arrive, and `convert.PDFToSVG`
+and `convert.SVGArchive` do the same with every page held in memory.
+`convert.SVGEntryName(n)` is `page_n.svg`; no byte of the PDF reaches an entry
+name.
+
+```go
+err := convert.StreamSVG(pdf, convert.SVGOptions{Pages: []int{1, 2}},
+    func(page, of int, svg []byte) error {
+        return os.WriteFile(fmt.Sprintf("page_%d.svg", page), svg, 0o644)
+    })
+```
+
+Paths, clips, images and transparency groups become SVG elements, and text
+becomes **outlines**, so the file needs no font. What SVG 1.1 cannot say
+(tiling and shading patterns, soft masks) is drawn by the pixel renderer and
+embedded as an `<image>` where it falls.
+
+⛔ **All or nothing.** The first page that cannot be written stops the run, the
+error leads with the page number, the exit status is 1 and **no file is left
+behind**: a zip with page 4 of 9 missing opens, counts and looks complete. The
+pages are streamed into a temporary file in the output directory, so the peak
+memory is one page, and the file takes its name only when every page is in it,
+never over an existing file and never through a link.
+
+The input is untrusted, and everything is bounded before it is spent:
+
+| bound | value |
+|---|---|
+| pages in one run | 1000 (`convert.MaxSVGPages`) |
+| SVG of one page | 64 MiB (`convert.DefaultSVGPageBytes`) |
+| SVG of the whole run, hence the zip | 256 MiB (`convert.MaxSVGBytes`) |
+| time for the whole run | 5 min (`convert.MaxSVGRunTime`) |
+| time for one page | 10 s (`convert.DefaultSVGPageTime`) |
+
+{{< callout type="warning" >}}
+**Two limits of the renderer show through.** The time limit is a request, not a
+promise, while [render#142](https://github.com/go-pdfkit/render/issues/142) is
+open: render's deadline is checked only now and then, and one page has been
+seen to overrun it about seventy times. And clips nested past 64 are refused
+(`render.ErrSVGTooDeep`) until
+[render#143](https://github.com/go-pdfkit/render/issues/143) gives it a raster
+fallback.
+{{< /callout >}}
+
+### Passwords: `-password` is gone (breaking)
+
+⛔ **`-password` was removed from `to-svg`, `from-pdf`, `to-archive` and
+`redraw`**, because an argument is visible in `ps` and stays in the shell's
+history. It is a **breaking** change of the command line (a MINOR bump, below
+v1). Replace it with `-password-file`:
+
+```
+$ pdfconv from-pdf -password-file pw.txt -o pages/ locked.pdf
+$ printf '%s' "$PW" | pdfconv redraw -password-file - locked.pdf out.pdf
+```
+
+`-password-file <path>` reads the password from a file, `-password-file -` from
+standard input; one trailing newline is stripped, and at most 4096 bytes are
+read. The Go API never took a password on a command line and is unchanged.
+
 ## What can be read and written
 
 | | |
