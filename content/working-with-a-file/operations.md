@@ -277,6 +277,64 @@ default), `-name` and `-contact` (what the signer claims), `-hash` (`sha256`,
 key) and `-reserve` (bytes of room for the CMS; `0` measures it by signing
 once beforehand).
 
+### Signing with a .p12 / .pfx file
+
+Since [ops v0.41.0](https://github.com/go-pdfkit/ops/releases/tag/v0.41.0), the
+key and certificate can come from one password-protected **PKCS #12** file
+(RFC 7292) instead of PEM files. `SignOptions.LoadPKCS12` reads it with
+[go-authn/pkcs12](https://github.com/go-authn/pkcs12) and sets `Signer`,
+`Certificate` and `Chain`; the rest of the options are yours.
+
+```go
+o := ops.SignOptions{Reason: "I agree"}
+if err := o.LoadPKCS12(p12, password); err != nil {
+	// errors.Is: ErrPKCS12Password, ErrPKCS12Unsupported,
+	//            ErrPKCS12TooLarge, ErrPKCS12Malformed
+}
+signed, err := ops.Sign(pdf, o)
+```
+
+```
+pdfops sign -p12 me.p12 -p12pass me.pass -reason "I agree" contract.pdf signed.pdf
+printf %s "$PW" | pdfops sign -p12 me.p12 -p12pass - contract.pdf signed.pdf
+pdfops sign -p12 me.p12 -visible 50,50,250,110 contract.pdf signed.pdf   # asks on the terminal
+```
+
+`-p12` replaces `-key` and `-cert` (giving both is refused); `-chain` still adds
+certificates, and every other flag works as before. **The password is never an
+argument or an environment variable**, because other processes can read both.
+`-p12pass <file>` names a file holding it; `-p12pass -` reads it from standard
+input, which then cannot also be the PDF. Both take at most 4098 bytes and drop
+one trailing line ending (LF or CRLF). With neither, `pdfops` asks on the
+terminal with no echo, puts the terminal back if Ctrl-C, Ctrl-\ or a kill
+arrives at the prompt, and refuses, saying so, when standard input is not a
+terminal. `pdfops` reads only regular files: a FIFO or a device given for any
+file is refused, not opened.
+
+The four errors, each tested with `errors.Is`:
+
+| Error | Meaning |
+|---|---|
+| `ErrPKCS12Password` | a wrong password **or** a damaged file (the format's MAC cannot tell them apart); also a password pkcs12 cannot use at all: not valid UTF-8, or over 1024 characters |
+| `ErrPKCS12Unsupported` | an algorithm or key this cannot read, a file with no MAC, an X25519 key (it cannot sign), an RSA key without CRT values |
+| `ErrPKCS12TooLarge` | a bound was hit, below |
+| `ErrPKCS12Malformed` | the file is not a well-formed PKCS #12 |
+
+Each also wraps go-authn/pkcs12's own error, so `errors.Is` answers for either.
+The bounds: `MaxPKCS12Size` is 8 MiB for the file (the command checks it before
+reading), at most 1 000 000 iterations per key derivation, 32 KiB per
+certificate, an RSA modulus of 8192 bits, and the password at most 1024
+characters. Decoding a hostile file allocates up to about 25 MB, so a service
+should cap the decodes in flight. A Go string cannot be erased: a library caller
+who cares keeps the password in a `[]byte`, converts it for the one call and
+zeroes it.
+
+⛔ **The certificate is not judged.** `LoadPKCS12` does **not** check its
+validity dates (an expired certificate signs), its key usage or extended key
+usage, or its chain to a root: it loads a key, a certificate and the
+certificates beside it. The caller decides whether to sign with it, and the
+verifier decides whether to trust the result.
+
 ### A visible signature
 
 Since [ops v0.40.0](https://github.com/go-pdfkit/ops/releases/tag/v0.40.0),
@@ -356,7 +414,8 @@ over 1 GiB, and an encrypted key.
   and a picture, nothing more.
 - **No encrypted input.** `ErrEncrypted`, above.
 - **No trust.** Whether a certificate is trusted is the verifier's question;
-  the tests sign with self-signed certificates.
+  the tests sign with self-signed certificates. A `.p12` is loaded the same way:
+  no validity dates, key usage or chain to a root are checked.
 
 ⛔ **poppler's `pdfsig` reports an Ed25519 signature as Invalid.** Its NSS
 backend does not accept it, while `reader/signature` (see
