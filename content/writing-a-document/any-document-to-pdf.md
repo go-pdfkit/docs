@@ -3,7 +3,7 @@ title: "Any document to PDF"
 weight: 140
 ---
 
-[`go-pdfkit/doc2pdf`](https://github.com/go-pdfkit/doc2pdf) (v0.1.0) turns a
+[`go-pdfkit/doc2pdf`](https://github.com/go-pdfkit/doc2pdf) (v0.3.0) turns a
 document into a PDF from a shell:
 
 ```sh
@@ -22,13 +22,38 @@ Pure Go, CGO-free, no TeX.
 
 ## What it reads
 
-Word, Excel, PowerPoint, OpenDocument Text, Markdown, reStructuredText, HTML,
-plain text, CSV, JSON, XML, EPUB, MOBI, FictionBook and email — fifteen
-formats through thirteen libraries, all of them arriving at the
+Word, Excel, PowerPoint, OpenDocument Text, Spreadsheet, Presentation and
+Graphics, Markdown, reStructuredText, HTML, plain text, CSV, JSON, XML, EPUB,
+MOBI, FictionBook, RTF (`.rtf`) and email — nineteen formats, all of them
+arriving at the
 [richdoc](https://github.com/go-richdoc/richdoc) document model and leaving
 through [`go-pdfkit/document`](https://github.com/go-pdfkit/document).
 
 `doc2pdf --list` prints the table, with the package that reads each one.
+
+RTF is read by [`go-richdoc/rtf`](https://github.com/go-richdoc/rtf) v0.1.2 or
+later. It keeps headings, lists, tables, hyperlinks, footnotes, PNG and JPEG
+pictures, bold, italic, strike and paragraph alignment; it does not keep font
+sizes, colours, underline, fonts, indents, headers and footers, or WMF and EMF
+pictures.
+
+## Input size
+
+`--max-input BYTES` bounds each input, and a larger file is refused **before it
+is read**. The default is 16 MiB for RTF and 256 MiB for every other format;
+the value must be from 1 up to 9223372036854775806, and anything else is a
+usage error (exit 2).
+
+```text
+doc2pdf: big.rtf is 20000000 bytes, over the 16777216-byte limit for RTF; -max-input raises it
+```
+
+## The output is written atomically
+
+The PDF goes to a temporary file beside the output and is then published. With
+`-f` it is renamed over the output; without `-f` it never overwrites an
+existing file, even on a file system with no hard links, and a failed write
+never leaves a partial file.
 
 ## Why it exists
 
@@ -81,7 +106,7 @@ hyphenation and justification are the point and a six-megabyte engine is
 acceptable; reach for this one when being CGO-free, building for `GOOS=js`,
 and keeping emphasis, links and tables matter more.
 
-Ten of the fifteen formats are exercised end to end by the tests, and the
-test asserts that number against the table — EPUB, MOBI, FictionBook,
-PowerPoint and ODT each need a real package built as a fixture, which is its
-own work. A recorded gap rather than an unnoticed one.
+Fifteen of the nineteen formats are exercised end to end by the tests, and the
+test asserts that number against the table — EPUB, MOBI, FictionBook and
+PowerPoint each need a real package built as a fixture, which is its own work.
+A recorded gap rather than an unnoticed one.
