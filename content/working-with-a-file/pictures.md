@@ -67,6 +67,10 @@ pages are streamed into a temporary file in the output directory, so the peak
 memory is one page, and the file takes its name only when every page is in it,
 never over an existing file and never through a link.
 
+⚠ **A page with millions of operators is expensive to parse.** One such page
+can use about 1 GiB while its content stream is parsed, before the output limit
+below applies (go-pdfkit/render#146).
+
 The input is untrusted, and everything is bounded before it is spent:
 
 | bound | value |
