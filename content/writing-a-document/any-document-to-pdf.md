@@ -3,7 +3,7 @@ title: "Any document to PDF"
 weight: 140
 ---
 
-[`go-pdfkit/doc2pdf`](https://github.com/go-pdfkit/doc2pdf) (v0.4.0) turns a
+[`go-pdfkit/doc2pdf`](https://github.com/go-pdfkit/doc2pdf) (v0.5.0) turns a
 document into a PDF from a shell:
 
 ```sh
@@ -30,7 +30,8 @@ arriving at the
 through [`go-pdfkit/document`](https://github.com/go-pdfkit/document).
 
 `doc2pdf --list` prints the table, with the package that reads each one.
-XPS and OpenXPS (`.xps`, `.oxps`) are read separately, see below.
+XPS and OpenXPS (`.xps`, `.oxps`) are read separately, see below, and so are HEIC and HEIF pictures (`.heic`,
+`.heif`, `.hif`).
 
 RTF is read by [`go-richdoc/rtf`](https://github.com/go-richdoc/rtf) v0.1.2 or
 later. It keeps headings, lists, tables, hyperlinks, footnotes, PNG and JPEG
@@ -57,6 +58,26 @@ ECMA-388 section 9.1.7 requires OpenType (TrueType and CFF) only. The charges
 are measured upper bounds, not proofs: the peak was measured up to 375 MiB
 under `-race` on the worst probe, and the bytes API (`xps.Convert`) buffers the
 whole PDF where the command streams it to the output file.
+
+## HEIC and HEIF pictures
+
+A HEIC or HEIF file is a picture, not a document, so it does not go through
+richdoc. `doc2pdf photo.heic` (v0.5.0) decodes it with
+[`go-images/heif`](https://github.com/go-images/heif) v0.1.0 and writes one page
+whose size is the decoded picture's, after its rotation, mirroring and cropping,
+laid at `--dpi` (150 by default). A picture too large for a PDF page is scaled
+down to fit. Several files become one PDF, in order, and a last argument ending
+in `.pdf` names the output:
+
+```sh
+doc2pdf --dpi 300 a.heic b.heic album.pdf
+```
+
+A picture is untrusted input, so a run is bounded: at most 256 pictures, 67
+million pixels for one and 134 million decoded pixels for all of them, and
+`--max-input` bytes for each file; over any of them the run stops with an error.
+Pictures and documents cannot be mixed in one run. Only the HEVC pictures of a
+HEIF file are read: alpha, HDR gain maps and image sequences are not.
 
 ## Input size
 
