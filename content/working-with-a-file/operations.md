@@ -27,7 +27,8 @@ versions, crop, resize, split; n-up,
 booklet, overlay and underlay, blank pages; watermarks, page numbers, Bates
 stamps and free stamps; placing a picture — a signature, a logo, a seal;
 sanitize, flatten, strip; compress, encrypt, decrypt and permissions;
-straightening a scan; and reading a page back as text or as pictures.
+straightening a scan; font to outline, which turns the text into paths; and
+reading a page back as text or as pictures.
 
 `place` is what "sign a PDF" means in every tool that offers it: a picture of
 a signature, put where you say. It is not cryptography and does not claim to
@@ -424,6 +425,52 @@ backend does not accept it, while `reader/signature` (see
 valid in `pdfsig`, the last one reported as "Total document signed". Use RSA or
 ECDSA when the reader is poppler.
 
+## Turning the text into paths
+
+Since [ops v0.43.0](https://github.com/go-pdfkit/ops/releases/tag/v0.43.0),
+`doc.OutlineText` writes the text of the pages a range names as vector paths,
+so the page looks as it did and holds no font: nothing is left to select or
+search, and nothing goes missing on a machine that lacks the font. The glyphs
+are the ones [render](../rendering/) draws (render v0.71.0), so a page looks
+after what the renderer showed before.
+
+```go
+doc, _ := ops.Open(bytes)
+if err := doc.OutlineText("1-3"); err != nil {
+	// ops.ErrOutlineTooLarge or ops.ErrOutlineVertical
+}
+out, _ := doc.Bytes()
+fmt.Println(doc.OutlineSkipped(), "annotations left as text")
+```
+
+TrueType, CFF and Type 1 fonts become paths, filled, stroked, both or nothing
+as the text render mode says; the modes that clip still clip. A Type 3 glyph
+becomes a form of its own. Text in a form or a tiling pattern is outlined in a
+copy, so a page that was not named keeps its own.
+
+### What it removes besides the font
+
+Outlined text that stays searchable in a side channel would defeat the point,
+so on an outlined page `/ActualText`, `/Alt` and `/E` are removed too, whether
+inline in the content or in an object, and from a structure element whose
+marked content lies on one. An element with no page and nothing in it goes when
+any page is outlined.
+
+### What it refuses, and what it does not reach
+
+- **A bound is a refusal.** A glyph is tens of bytes of path, so the result is
+  not the size of the input. The glyphs, the bytes written and read, the
+  nesting of forms and the depth of `q` are bounded for the whole document, and
+  past a bound `OutlineText` returns `ErrOutlineTooLarge` and writes nothing.
+- **Vertical writing is refused** with `ErrOutlineVertical`: the renderer does
+  not place those glyphs, and paths at places nobody checked are worse than
+  text left alone.
+- **Annotations are not reached.** The text of an annotation's appearance, a
+  field value (an inherited one included) and `/Contents` stay as they are, and
+  `OutlineSkipped` returns how many there were.
+- A page cannot be both outlined and recoloured, redacted or have its text
+  replaced; text a stamp adds afterwards is not outlined.
+
 ## On the command line
 
 ```
@@ -437,6 +484,7 @@ pdfops -password letmein permissions locked.pdf
 pdfops text -layout -pages 1 paper.pdf
 pdfops images paper.pdf pictures/
 pdfops deskew scan.pdf straight.pdf
+pdfops outlinetext -pages 1-3 report.pdf paths.pdf
 ```
 
 ## What the corpus says
