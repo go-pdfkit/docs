@@ -3,7 +3,7 @@ title: "Any document to PDF"
 weight: 140
 ---
 
-[`go-pdfkit/doc2pdf`](https://github.com/go-pdfkit/doc2pdf) (v0.3.0) turns a
+[`go-pdfkit/doc2pdf`](https://github.com/go-pdfkit/doc2pdf) (v0.4.0) turns a
 document into a PDF from a shell:
 
 ```sh
@@ -30,12 +30,33 @@ arriving at the
 through [`go-pdfkit/document`](https://github.com/go-pdfkit/document).
 
 `doc2pdf --list` prints the table, with the package that reads each one.
+XPS and OpenXPS (`.xps`, `.oxps`) are read separately, see below.
 
 RTF is read by [`go-richdoc/rtf`](https://github.com/go-richdoc/rtf) v0.1.2 or
 later. It keeps headings, lists, tables, hyperlinks, footnotes, PNG and JPEG
 pictures, bold, italic, strike and paragraph alignment; it does not keep font
 sizes, colours, underline, fonts, indents, headers and footers, or WMF and EMF
 pictures.
+
+## XPS and OpenXPS
+
+`doc2pdf scan.xps` and `doc2pdf scan.oxps` (v0.4.0) write a **vector** PDF with
+selectable text and embedded fonts. XPS does not go through richdoc: every
+glyph sits where its producer put it, so the package is read directly by the
+`xps` package of doc2pdf.
+
+It draws paths and geometry, clips, opacity and transforms; solid, linear,
+radial and image brushes (PNG, JPEG, TIFF, tiled); and `Glyphs` runs in the
+embedded font. What it does not draw (VisualBrush, JPEG XR, TrueType
+collections) is counted and printed as `not drawn: …`.
+
+An XPS file is untrusted input, so one memory budget bounds a conversion,
+`MaxMemory`, 160 MiB by default, together with ceilings on parts, pages, XML
+depth, image pixels and drawing work. WOFF and WOFF2 fonts are refused, because
+ECMA-388 section 9.1.7 requires OpenType (TrueType and CFF) only. The charges
+are measured upper bounds, not proofs: the peak was measured up to 375 MiB
+under `-race` on the worst probe, and the bytes API (`xps.Convert`) buffers the
+whole PDF where the command streams it to the output file.
 
 ## Input size
 
